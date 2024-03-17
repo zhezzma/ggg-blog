@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="card flex flex-col items-center p-4 mt-5">
-      <NuxtImg
+      <img
         :src="author?.avatar"
         :alt="author?.name"
         class="rounded-full border border-gray-300"
