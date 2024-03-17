@@ -25,7 +25,7 @@ export default defineAppConfig({
   menu: [
     { name: "首页", path: "/" },
     { name: "关于我们", path: "/about" },
-
+    { name: "存档", path: "/archives" },
   ],
   newsletter: {
     enabled: true,

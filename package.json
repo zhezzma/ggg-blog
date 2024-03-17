@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test": "vitest"
+    "test": "vitest",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@nuxt/content": "^2.12.1",
@@ -16,7 +17,9 @@
     "@nuxt/image": "^1.4.0",
     "@nuxt/ui": "^2.14.2",
     "@vueuse/nuxt": "^10.9.0",
+    "feed": "^4.2.2",
     "nuxt": "^3.10.3",
+    "sitemap": "^7.1.1",
     "tiny-pinyin": "^1.3.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
