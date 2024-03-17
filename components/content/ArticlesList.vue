@@ -1,22 +1,18 @@
-
-
-
 <script lang="ts" setup>
 import type { QueryBuilderParams } from "@nuxt/content/dist/runtime/types";
 
 const props = defineProps({
   path: {
     type: String,
-    default: '/'
+    default: "/",
   },
   pageSize: {
     type: Number,
-    default: 10
-  }
-})
+    default: 10,
+  },
+});
 
 const page = ref(0);
-
 
 let query: QueryBuilderParams = {};
 
@@ -32,12 +28,12 @@ watch(page, (newX) => {
 });
 
 page.value = 1;
-
 </script>
 
 <template>
+  <div class="">
     <ContentList :query="query" v-slot="{ list }">
-      <div v-for="article in list" :key="article._path" class="card my-5  p-4">
+      <div v-for="article in list" :key="article._path" class="card my-5 p-4">
         <h2>
           <ULink
             :to="article._path"
@@ -52,12 +48,8 @@ page.value = 1;
         </div>
       </div>
     </ContentList>
-
-    <UPagination
-      v-model="page"
-      :page-count="props.pageSize"
-      :total="count"
-    />
-
- 
- </template>
+  </div>
+  <div class="flex justify-center mt-10">
+    <UPagination v-model="page" :page-count="props.pageSize" :total="count" class="pagination" />
+  </div>
+</template>

@@ -1,5 +1,5 @@
 <template>
-  <header class="px-4 pb-5 pt-7 ring-1 ring-zinc-950/5 dark:ring-white/5">
+  <header class="px-4 pb-5 pt-7 ring-1 ring-zinc-950/5 dark:ring-white/5 sticky top-0 z-30 bg-white dark:bg-black">
     <div class="mx-auto flex items-center justify-between lg:max-w-7xl">
       <div class="flex space-x-5">
         <NuxtLink

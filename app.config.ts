@@ -22,4 +22,17 @@ export default defineAppConfig({
       },
     },
   ],
+  menu: [
+    { name: "首页", path: "/" },
+    { name: "关于我们", path: "/about" },
+
+  ],
+  newsletter: {
+    enabled: true,
+    form_action: "YOUR_NEWSLETTER_FORM_ACTION",
+  },
+  
+  ui: {
+    primary: 'blue'
+  },
 });

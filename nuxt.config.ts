@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     documentDriven: false,
 
   },
- 
   components: [
     { path: resolve('./components'), global: true },
     { path: resolve('./components/content'), global: true }

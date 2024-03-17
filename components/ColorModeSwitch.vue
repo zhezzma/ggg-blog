@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 const onClick = () => (colorMode.value === 'light' ? (colorMode.preference = 'dark') : (colorMode.preference = 'light'))
-
+//colormode会在html上加一个dark和light的class
 </script>
 
 <template>

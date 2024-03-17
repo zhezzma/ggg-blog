@@ -1,12 +1,11 @@
 <script setup lang="ts">
-
-
-
+definePageMeta({
+  layout: "article",
+});
 </script>
-
 <template>
-  <main class=" mt-5 ">
-    <div class="card mt-5 p-5 markdown-body" >
+  <main class="mt-5">
+    <div class="card mt-5 p-5 markdown-body">
       <ContentDoc>
         <template #default="{ doc }">
           <article>
