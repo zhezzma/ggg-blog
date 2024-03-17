@@ -37,16 +37,19 @@ page.value = 1;
 
 <template>
     <ContentList :query="query" v-slot="{ list }">
-      <div v-for="article in list" :key="article._path">
+      <div v-for="article in list" :key="article._path" class="card my-5  p-4">
         <h2>
           <ULink
             :to="article._path"
             active-class="text-primary"
-            inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+            inactive-class="font-semibold text-zinc-700 hover:text-zinc-600 dark:text-white dark:hover:text-zinc-300"
           >
             {{ article.title }}
           </ULink>
         </h2>
+        <div class="text-gray-500 dark:text-gray-400">
+          {{ article.description }}
+        </div>
       </div>
     </ContentList>
 

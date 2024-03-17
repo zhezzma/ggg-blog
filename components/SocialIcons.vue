@@ -2,37 +2,50 @@
 const props = defineProps({
   socials: {
     type: Object,
-    default: () => {}
-  }
-})
+    default: () => {},
+  },
+});
 
-const builtInSocials = ['twitter', 'facebook', 'instagram', 'youtube', 'github', 'medium']
+const builtInSocials = [
+  "twitter",
+  "facebook",
+  "instagram",
+  "youtube",
+  "github",
+  "medium",
+];
 
 const icons = computed<any>(() => {
   return Object.entries(props.socials)
     .map(([key, value]) => {
-      if (typeof value === 'object') {
-        return value
-      } else if (typeof value === 'string' && value && builtInSocials.includes(key)) {
+      if (typeof value === "object") {
+        return value;
+      } else if (
+        typeof value === "string" &&
+        value &&
+        builtInSocials.includes(key)
+      ) {
         return {
-          href: `https://${key}.com/${value}`,
+          href: value.startsWith("http")
+            ? value
+            : `https://${key}.com/${value}`,
           icon: `uil:${key}`,
-          label: value
-        }
+          label: value,
+        };
       } else {
-        return null
+        return null;
       }
     })
-    .filter(Boolean)
-})
+    .filter(Boolean);
+});
 
-const getRel = (icon:any) => {
-  const base = ['noopener', 'noreferrer']
+const getRel = (icon: any) => {
+  const base = ["noopener", "noreferrer"];
   if (icon.rel) {
-    base.push(icon.rel)
+    base.push(icon.rel);
   }
-  return base.join(' ')
-}
+  return base.join(" ");
+};
 </script>
 
 <template>
@@ -49,5 +62,3 @@ const getRel = (icon:any) => {
     <Icon v-if="icon.icon" :name="icon.icon" />
   </NuxtLink>
 </template>
-
- 

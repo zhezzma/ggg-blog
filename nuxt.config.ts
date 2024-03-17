@@ -5,7 +5,10 @@ const { resolve } = createResolver(import.meta.url)
 export default defineNuxtConfig({
   devtools: { enabled: true },
   colorMode: {
-    preference: "light",
+    preference: 'system', // default value of $colorMode.preference
+    fallback: 'dark', // fallback value if not system preference found
+    classSuffix: '',
+    storageKey: 'nuxt-color-mode'
   },
   modules: [
     "~/modules/nuxt-content-ymind",
@@ -14,23 +17,16 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/fonts",
     '@nuxt/image',
+    '@nuxtjs/color-mode',
     "@vueuse/nuxt",
   ],
   // Vuetify's global styles
   css: ["~/assets/css/main.css"],
   content: {
     documentDriven: false,
-    highlight: {
-      theme: {
-        // Default theme (same as single string)
-        default: 'github-light',
-        // Theme used if `html.dark`
-        dark: 'github-dark',
-        // Theme used if `html.sepia`
-        sepia: 'monokai'
-      }
-    }
+
   },
+ 
   components: [
     { path: resolve('./components'), global: true },
     { path: resolve('./components/content'), global: true }
