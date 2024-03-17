@@ -4,11 +4,16 @@ export default defineNitroPlugin((nitroApp) => {
   //运行的时候会对所有的md文件进行缓存.所以测试的时候需要把.nuxt/content-cache删除掉
   //或者单独更改某个.md文件会重新生成该文件的缓存
   nitroApp.hooks.hook("content:file:beforeParse", (file) => {
-    if (file._id.endsWith(".md")) {
-      file.body = file.body.replace(/\(.*?\/public\//g, "(/");
+    if (file._id.endsWith(".md") == false) {
+     return;
     }
+    file.body = file.body.replace(/\(.*?\/public\//g, "(/");
   });
   nitroApp.hooks.hook("content:file:afterParse", (file) => {
+
+    if (file._id.endsWith(".md") == false) {
+      return;
+     }
     if (!file.date) {
       // Extract the base name of the file
       const baseName = path.basename(file._file); // '2023-05-16-nuxt3-init-fail'
@@ -26,23 +31,24 @@ export default defineNitroPlugin((nitroApp) => {
       // console.log(file._file,file.date);
     }
 
-var baseName = path.basename(file._file, path.extname(file._file)).toLowerCase();
+    var baseName = path
+      .basename(file._file, path.extname(file._file))
+      .toLowerCase();
 
-    if (
-      file._path
-        .toLowerCase()
-        .includes(
-          baseName
-        ) == false
-    ) {
-
+    if (file._path && file._path.toLowerCase().includes(baseName) == false) {
       // Split by '/' to get segments
       let segments = file._file.split("/");
       // Replace the last segment with `pinyinResult`
-      segments[segments.length - 1] = pinyin.convertToPinyin(baseName).toLowerCase();
+      segments[segments.length - 1] = pinyin
+        .convertToPinyin(baseName)
+        .toLowerCase();
       // Join the segments back together with '/'
-      file._path = "/"+segments.join("/");
+      file._path = "/" + segments.join("/");
       //console.log(file._path, file._file);
+    }
+
+    if (!file || !file._path) {
+      console.log(file+"file is null");
     }
   });
 });

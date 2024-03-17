@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     storageKey: 'nuxt-color-mode'
   },
   modules: [
-    "~/modules/nuxt-content-ymind",
+    //"~/modules/nuxt-content-ymind",
     "@nuxt/content",
     "@nuxt/test-utils/module",
     "@nuxt/ui",
@@ -24,10 +24,17 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   content: {
     documentDriven: false,
-
+    experimental: {
+      search: true
+    }
   },
   components: [
     { path: resolve('./components'), global: true },
     { path: resolve('./components/content'), global: true }
   ],
+   // or sourcemap: true
+   sourcemap: {
+    server: true,
+    client: true
+  }
 });

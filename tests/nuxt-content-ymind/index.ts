@@ -1,6 +1,5 @@
 // filename: ymind.mjs
-import { resolve } from 'path'
-import { createResolver, defineNuxtModule, type Resolver } from '@nuxt/kit'
+import { createResolver, defineNuxtModule } from '@nuxt/kit'
 
 export const name = 'nuxt-content-ymind'
 
