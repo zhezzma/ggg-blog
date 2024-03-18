@@ -9,7 +9,7 @@ definePageMeta({
       <template #default="{ doc }">
         <article>
           <h1
-            class="text-center text-3xl font-semibold text-zinc-600 dark:text-white"
+            class="text-center text-3xl font-semibold text-zinc-800 dark:text-zinc-50"
           >
             {{ doc.title }}
           </h1>

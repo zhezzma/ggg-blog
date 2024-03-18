@@ -4,14 +4,14 @@
       <img
         :src="author?.avatar"
         :alt="author?.name"
-        class="rounded-full border border-gray-300"
+        class="rounded-full border border-zinc-300"
         width="100"
         height="100"
       />
       <div class="font-semibold text-xl mt-2">
         {{ author?.name }}
       </div>
-      <div class="text-gray-500 text-sm mt-2 text-center">
+      <div class="text-zinc-500 text-sm mt-2 text-center">
         {{ author?.description }}
       </div>
       <div v-if="author?.socials && Object.entries(author.socials)" class="mt-2 space-x-5">

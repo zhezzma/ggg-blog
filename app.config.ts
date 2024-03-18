@@ -34,6 +34,7 @@ export default defineAppConfig({
   },
 
   ui: {
-    primary: 'blue'
+    primary: 'blue',
+    gray: 'cool'
   },
 });

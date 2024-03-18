@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-100 text-gray-800 dark:bg-black dark:text-gray-500">
+  <footer class="bg-zinc-200 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-500">
     <div class="max-w-7xl p-5 mx-auto">
       <div class="flex justify-between">
         <div>
@@ -9,7 +9,7 @@
               <NuxtLink
                 :key="item.path"
                 :to="item.path"
-                class="hover:text-gray-400"
+                class="hover:text-zinc-400"
                 >{{ item.name }}
               </NuxtLink>
             </li>
@@ -41,13 +41,13 @@
               autocomplete="email"
               type="email"
               placeholder="Your email"
-              class="p-2 text-gray-700 w-full"
+              class="p-2 text-zinc-700 w-full"
               required
             />
             <input type="hidden" name="ml-submit" value="1" />
             <input type="hidden" name="anticsrf" value="true" />
             <button
-              class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-zinc-50 font-bold py-2 px-4 rounded"
               @click.prevent="subscribe"
             >
               Subscribe
@@ -56,7 +56,7 @@
         </div>
       </div>
       <div
-        class="flex max-w-7xl m-auto mb-2 space-x-2 text-sm text-gray-500 dark:text-gray-400"
+        class="flex max-w-7xl m-auto mb-2 space-x-2 text-sm text-zinc-500 dark:text-zinc-400"
       >
         <div>Copyright © {{ new Date().getFullYear() }}</div>
         <div>•</div>

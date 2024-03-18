@@ -1,15 +1,15 @@
 <template>
   <header
-    class="ring-1 ring-zinc-950/5 dark:ring-white/5 sticky top-0 z-30 bg-gray-50 dark:bg-black"
+    class="ring-1 ring-zinc-300 dark:ring-zinc-800 sticky top-0 z-30 bg-zinc-50 dark:bg-zinc-900 mb-8"
   >
     <div
-      class="flex flex-col mx-auto lg:flex-row lg:max-w-7xl lg:space-x-10 items-center py-3 px-5"
+      class="flex flex-col mx-auto lg:flex-row lg:max-w-7xl lg:space-x-10 items-center p-5"
     >
       <div class="flex w-full lg:w-auto items-center justify-between">
         <a :href="url" class="text-lg">
-          <span class="font-bold text-slate-800 dark:text-white"
+          <span class="font-bold text-slate-800 dark:text-zinc-50"
             >{{ config.title.substring(0, 6) }} </span
-          ><span class="text-slate-500 dark:text-gray-400">{{
+          ><span class="text-slate-500 dark:text-zinc-400">{{
             config.title.substring(6)
           }}</span>
         </a>
@@ -17,7 +17,7 @@
         <div class="block lg:hidden">
           <button
             @click="open = !open"
-            class="text-gray-800 dark:text-gray-100"
+            class="text-zinc-800 dark:text-zinc-50"
           >
             <svg
               fill="currentColor"
@@ -44,7 +44,7 @@
       <nav class="lg:flex w-full" :class="{ hidden: !open }">
         <ul
           class="flex flex-col w-full lg:flex-row lg:space-x-10 text-center"
-          :class="{ navHover: open }"
+          :class="{ navsd: open }"
         >
           <li><NuxtLink :to="url"> 首页 </NuxtLink></li>
           <ContentNavigation v-slot="{ navigation }">
@@ -54,10 +54,9 @@
               </NuxtLink>
             </li>
           </ContentNavigation>
-          <li class="flex-1 lg:flex lg:justify-end lg:space-x-5">
+          <li class="flex-1 flex flex-col lg:flex-row lg:justify-end lg:space-x-5">
             <button
               aria-label="Color Mode"
-              class="inline-block w-5"
               @click="onClick"
             >
               <Icon name="i-heroicons-magnifying-glass" class="w-5 h-5" />

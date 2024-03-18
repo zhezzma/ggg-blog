@@ -3,7 +3,7 @@
     <AppHeader />
     <div class="flex-1 mx-auto lg:max-w-7xl w-full mb-10 p-5">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
-        <div class="lg:col-span-9">
+        <div class="lg:col-span-9 mb-5">
           <slot />
         </div>
         <div class="lg:col-span-3">

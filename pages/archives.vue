@@ -12,7 +12,7 @@
           </div>
           <NuxtLink
             :to="article._path"
-            class="text-zinc-700 hover:text-zinc-600 dark:text-gray-400 dark:hover:text-zinc-300"
+            class="text-zinc-700 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
           >
             <span>{{ article.date }}</span> &middot;
             <span>{{ article.title }}</span>
