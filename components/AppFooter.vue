@@ -1,9 +1,9 @@
 <template>
   <footer class="bg-zinc-200 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-500">
     <UContainer class="py-5">
-      <div class="flex justify-between">
-        <div>
-          <h3 class="font-bold text-lg mb-4">链接</h3>
+      <div class="flex">
+        <div class="w-1/3">
+          <h3 class="font-bold text-lg mb-2">链接</h3>
           <ul>
             <li v-for="item in menu" :key="item.path">
               <NuxtLink
@@ -15,18 +15,19 @@
             </li>
           </ul>
         </div>
-        <div>
-          <h3 class="font-bold text-lg mb-4">关注</h3>
+        <div class="w-1/3">
+          <h3 class="font-bold text-lg mb-2">关注</h3>
           <div
             v-if="author?.socials && Object.entries(author.socials)"
-            class="mt-2 space-x-5 text-2xl"
+            class=" text-2xl"
           >
-            <SocialIcons :socials="author.socials" />
+            <SocialIcons :socials="author.socials" class="pr-5" />
           </div>
         </div>
+   
         <div v-if="newsletterEnabled">
-          <h3 class="font-bold text-lg mb-4">订阅</h3>
-          <p class="mb-4">通过电子邮件获取最新文章</p>
+          <h3 class="font-bold text-lg mb-2">订阅</h3>
+          <p class="mb-2">通过电子邮件获取最新文章</p>
           <p v-if="error" class="text-red-500 text-xs italic mb-2">
             订阅失败。请稍后重试
           </p>
@@ -58,7 +59,7 @@
         </div>
       </div>
       <div
-        class="flex max-w-7xl m-auto mb-2 space-x-2 text-sm text-zinc-500 dark:text-zinc-400"
+        class="flex max-w-7xl m-auto mt-5 space-x-2 text-sm justify-center flex-wrap"
       >
         <div>Copyright © {{ new Date().getFullYear() }}</div>
         <div>•</div>

@@ -4,6 +4,10 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  class: {
+    type: [String, Object, Array] as PropType<any>,
+    default: () => "",
+  },
 });
 
 const builtInSocials = [
@@ -57,6 +61,7 @@ const getRel = (icon: any) => {
     :title="icon.label"
     :aria-label="icon.label"
     :href="icon.href"
+    :class="props.class"
     target="_blank"
   >
     <Icon v-if="icon.icon" :name="icon.icon" />
