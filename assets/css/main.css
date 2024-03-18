@@ -9,7 +9,9 @@
    dark:bg-zinc-900 dark:shadow-[0px_2px_8px_0px_rgba(0,_0,_0,_0.20),_0px_1px_0px_0px_rgba(255,_255,_255,_0.06)_inset] 
    forced-colors:outline;
 }
-
+.navHover li{
+  @apply hover:bg-gray-200 dark:hover:bg-gray-700
+ }
 
 .pagination button {
   @apply px-5 py-3 

@@ -4,28 +4,26 @@ definePageMeta({
 });
 </script>
 <template>
-  <main class="mt-5">
-    <div class="card mt-5 p-5 markdown-body">
-      <ContentDoc>
-        <template #default="{ doc }">
-          <article>
-            <h1
-              class="text-center text-3xl font-semibold text-zinc-600 dark:text-white"
-            >
-              {{ doc.title }}
-            </h1>
-            <div class="mt-5">
-              <ContentRenderer :value="doc" />
-            </div>
-          </article>
-        </template>
-        <template #empty>
-          <h1>Empty</h1>
-        </template>
-        <template #not-found>
-          <h1>Not found</h1>
-        </template>
-      </ContentDoc>
-    </div>
-  </main>
+  <div class="card p-5 markdown-body">
+    <ContentDoc>
+      <template #default="{ doc }">
+        <article>
+          <h1
+            class="text-center text-3xl font-semibold text-zinc-600 dark:text-white"
+          >
+            {{ doc.title }}
+          </h1>
+          <div class="mt-5">
+            <ContentRenderer :value="doc" />
+          </div>
+        </article>
+      </template>
+      <template #empty>
+        <h1>Empty</h1>
+      </template>
+      <template #not-found>
+        <h1>Not found</h1>
+      </template>
+    </ContentDoc>
+  </div>
 </template>

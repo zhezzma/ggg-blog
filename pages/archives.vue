@@ -1,43 +1,34 @@
 <template>
-  <div class="mt-5">
+  <div class=" card p-5 ">
     <h1 class="text-4xl font-bold mb-8 text-center">存档</h1>
-
-
-      <ContentList :query="query">
-        <template #not-found>
-          <p>No posts found.</p>
-        </template>
-        <template #default="{ list }">
-          <div
-            v-for="(article, index) in list"
-            :key="article._path"
-          >
-            <div
-              v-if="shouldDisplayYear(list, article.date, index)"
-              class="my-4"
-            >
-              <span class="text-xl font-bold">{{ getYear(article.date) }}</span>
-            </div>
-            <NuxtLink
-              :to="article._path"
-              class="text-zinc-700 hover:text-zinc-600 dark:text-gray-400 dark:hover:text-zinc-300"
-            >
-              <span>{{ article.date }}</span> &middot;
-              <span>{{ article.title }}</span>
-            </NuxtLink>
+    <ContentList :query="query">
+      <template #not-found>
+        <p>No posts found.</p>
+      </template>
+      <template #default="{ list }">
+        <div v-for="(article, index) in list" :key="article._path">
+          <div v-if="shouldDisplayYear(list, article.date, index)" class="my-4">
+            <span class="text-xl font-bold">{{ getYear(article.date) }}</span>
           </div>
-        </template>
-      </ContentList>
- 
+          <NuxtLink
+            :to="article._path"
+            class="text-zinc-700 hover:text-zinc-600 dark:text-gray-400 dark:hover:text-zinc-300"
+          >
+            <span>{{ article.date }}</span> &middot;
+            <span>{{ article.title }}</span>
+          </NuxtLink>
+        </div>
+      </template>
+    </ContentList>
   </div>
 </template>
- 
+
 <script setup lang="ts">
 import type { QueryBuilderParams } from "@nuxt/content/dist/runtime/types";
 
 definePageMeta({
-  layout: 'page'
-})
+  layout: "page",
+});
 const query: QueryBuilderParams = {
   path: "",
   where: [{ listed: { $ne: false } }],

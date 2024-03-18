@@ -38,7 +38,7 @@ page.value = 1;
   <div class="">
     <ContentList :query="query">
       <template #default="{ list }">
-        <div v-for="article in list" :key="article._path" class="card my-5 p-4">
+        <div v-for="article in list" :key="article._path" class="card mb-5 p-4">
           <h2>
             <ULink
               :to="article._path"
@@ -60,7 +60,7 @@ page.value = 1;
       </template>
     </ContentList>
 
-    <div v-if="count > 0" class="flex justify-center mt-10">
+    <div v-if="count > 0" class="flex justify-center my-10">
       <UPagination
         v-model="page"
         :page-count="pageSize"

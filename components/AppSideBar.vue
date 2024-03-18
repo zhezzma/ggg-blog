@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card flex flex-col items-center p-4 mt-5">
+    <div class="card flex flex-col items-center p-4">
       <img
         :src="author?.avatar"
         :alt="author?.name"

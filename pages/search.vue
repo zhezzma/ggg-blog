@@ -15,14 +15,7 @@ async function onClick(){
   <main class="mt-5 card p-4">
     <div class="flex space-x-10">
       <UInput v-model="search" class="flex-1" />
-      <UButton
-        icon="i-heroicons-magnifying-glass"
-        size="sm"
-        color="primary"
-        square
-        variant="solid"
-        @click="onClick"
-      />
+
     </div>
     <div v-for="article in results" :key="article.id" class="my-5 p-4">
       <h2>
