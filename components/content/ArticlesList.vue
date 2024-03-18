@@ -43,7 +43,7 @@ page.value = 1;
             <h2>
               <ULink
                 :to="article._path"
-                active-class="text-primary"
+                active-class="text-primary text-xl "
                 inactive-class="font-semibold text-xl  text-zinc-700 hover:text-zinc-600 dark:text-zinc-50 dark:hover:text-zinc-300"
               >
                 {{ article.title }}
