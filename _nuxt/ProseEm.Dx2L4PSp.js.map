@@ -1,0 +1,1 @@
+{"version":3,"file":"ProseEm.Dx2L4PSp.js","sources":["../../../../node_modules/@nuxtjs/mdc/dist/runtime/components/prose/ProseEm.vue"],"sourcesContent":["<template>\n  <em>\n    <slot />\n  </em>\n</template>\n"],"names":["_cache","_openBlock","_createElementBlock"],"mappings":"qFAGOA,EAAA,QADKC,EAAA,EAAAC,EAAA,KAAA,KAAA","x_google_ignoreList":[0]}

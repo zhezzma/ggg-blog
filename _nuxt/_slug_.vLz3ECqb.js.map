@@ -1,0 +1,1 @@
+{"version":3,"file":"_slug_.vLz3ECqb.js","sources":["../../../../pages/[[slug]].vue"],"sourcesContent":["<script setup lang=\"ts\">\n\nconst route = useRoute();\n</script>\n\n<template>\n  <ArticlesList :path=\"route.path\" />\n</template>\n"],"names":["route","useRoute"],"mappings":"kVAEA,MAAMA,EAAQC"}

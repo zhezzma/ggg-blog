@@ -1,0 +1,2 @@
+import{_ as r}from"./ArticlesList.vue.32uCSXmb.js";import{d as e,s,b as p,D as a,E as n}from"./entry.DME2G-rb.js";import"./Card.D6VxqV1M.js";import"./ContentList.BTkgGC9x.js";import"./ContentQuery.zq_sGe60.js";import"./asyncData.D3POMdNR.js";import"./query.Bf2ZAAiC.js";import"./preview.c_ZNuifT.js";const B=e({__name:"[[slug]]",setup(m){const t=s();return(c,i)=>{const o=r;return p(),a(o,{path:n(t).path},null,8,["path"])}}});export{B as default};
+//# sourceMappingURL=_slug_.vLz3ECqb.js.map
