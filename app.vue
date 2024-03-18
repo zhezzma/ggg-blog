@@ -23,7 +23,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="bg-zinc-50 dark:bg-zinc-900">
+  <div >
     <NuxtLoadingIndicator />
 
     <NuxtLayout>

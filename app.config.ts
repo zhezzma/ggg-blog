@@ -3,15 +3,17 @@ export default defineAppConfig({
   description: "The minimalist blog theme",
   url: "",
   logo: "",
-  pageSize:15,
-  descriptionSliceLength:300,
+  pageSize: 15,
+  descriptionSliceLength: 300,
+  icp: "皖ICP备19024574号 ",
+  wangan:"皖公网安备34030002001147",
   authors: [
     {
       default: true,
-      username: "john-doe",
-      name: "John Doe",
+      username: "zhepama",
+      name: "李九仙",
       description:
-        "lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.",
+        "一个不怎么正经的程序员，喜欢折腾各种奇奇怪怪的玩意儿。",
       avatar: "/images/avatar.png",
       socials: {
         twitter: "https://twitter.com",
@@ -26,8 +28,8 @@ export default defineAppConfig({
   ],
   menu: [
     { name: "首页", path: "/" },
-    { name: "关于我们", path: "/about" },
     { name: "存档", path: "/archives" },
+    { name: "关于", path: "/about" },
   ],
   newsletter: {
     enabled: true,
@@ -35,7 +37,18 @@ export default defineAppConfig({
   },
 
   ui: {
-    primary: 'blue',
-    gray: 'cool'
+    primary: "zinc", //值就是tailwindcss里的颜色 http://localhost:3000/_tailwind/
+    gray: "zinc",
+    button: {
+      default: {
+        color: "blue",
+      },
+      rounded: 'rounded-sm',
+    },
+    card: {
+      background: "bg-white dark:bg-black",
+      rounded: "rounded-sm",
+      shadow: "  shadow-lg shadow-zinc-400/50 dark:shadow-zinc-800/50 ",
+    },
   },
 });

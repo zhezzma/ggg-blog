@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <AppHeader />
-    <div class="flex-1 mx-auto lg:max-w-7xl w-full mb-10 p-5">
+    <UContainer class="flex-1 w-full  mb-10 ">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
         <div class="lg:col-span-9 mb-5">
           <slot />
@@ -10,7 +10,7 @@
           <AppSideBar />
         </div>
       </div>
-    </div>
+    </UContainer>
     <AppFooter />
   </div>
 </template>

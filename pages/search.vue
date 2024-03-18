@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+
+
 const search = ref("");
 
 let results: any;
@@ -11,7 +13,7 @@ async function startSearch(){
 </script>
 
 <template>
-  <div class="card p-4">
+  <UCard >
     <div class="flex space-x-10">
       <UInput v-model="search" class="flex-1" />
     </div>
@@ -30,5 +32,5 @@ async function startSearch(){
       </div>
       <UDivider class="my-4" />
     </div>
-  </div>
+  </UCard>
 </template>

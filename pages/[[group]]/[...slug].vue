@@ -1,10 +1,12 @@
 <script setup lang="ts">
+
+
 definePageMeta({
   layout: "article",
 });
 </script>
 <template>
-  <div class="card p-5 markdown-body">
+  <UCard class="markdown-body">
     <ContentDoc>
       <template #default="{ doc }">
         <article>
@@ -25,5 +27,5 @@ definePageMeta({
         <h1>Not found</h1>
       </template>
     </ContentDoc>
-  </div>
+  </UCard>
 </template>

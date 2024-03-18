@@ -38,26 +38,28 @@ page.value = 1;
   <div class="">
     <ContentList :query="query">
       <template #default="{ list }">
-        <div v-for="article in list" :key="article._path" class="card mb-8 p-4">
-          <div class="flex justify-between border-b mb-3 pb-3 border-b-zinc-300 dark:border-b-zinc-800">
-            <h2>
-              <ULink
-                :to="article._path"
-                active-class="text-primary text-xl "
-                inactive-class="font-semibold text-xl  text-zinc-700 hover:text-zinc-600 dark:text-zinc-50 dark:hover:text-zinc-300"
-              >
-                {{ article.title }}
-              </ULink>
-            </h2>
-            <span class="text-zinc-400 dark:text-zinc-300">{{
-              article.date
-            }}</span>
-          </div>
-     
-          <div class="text-zinc-500 dark:text-zinc-400">
-            {{ article.description }}
-          </div>
-        </div>
+        <UCard v-for="article in list" :key="article._path" class="mb-8">
+          <template #header>
+            <div
+              class="flex justify-between"
+            >
+              <h2>
+                <ULink
+                  :to="article._path"
+                  active-class="text-primary text-xl "
+                  inactive-class="font-semibold text-xl  text-zinc-700 hover:text-zinc-600 dark:text-zinc-50 dark:hover:text-zinc-300"
+                >
+                  {{ article.title }}
+                </ULink>
+              </h2>
+              <span class="text-zinc-400 dark:text-zinc-300">{{
+                article.date
+              }}</span>
+            </div>
+          </template>
+
+          {{ article.description }}
+        </UCard>
       </template>
       <template #not-found>
         <div class="my-5 p-4">

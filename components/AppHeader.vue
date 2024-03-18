@@ -1,9 +1,9 @@
 <template>
   <header
-    class="shadow-lg shadow-zinc-300 dark:shadow-zinc-800   sticky top-0 z-30 bg-zinc-100 dark:bg-zinc-900 mb-8"
+    class="shadow-lg shadow-zinc-300 dark:shadow-zinc-800/50 sticky top-0 z-30 bg-zinc-50 dark:bg-zinc-950 mb-10"
   >
-    <div
-      class="flex flex-col mx-auto lg:flex-row lg:max-w-7xl lg:space-x-10 items-center p-5"
+    <UContainer
+      class="flex flex-col lg:flex-row lg:space-x-10 items-center py-5"
     >
       <div class="flex w-full lg:w-auto items-center justify-between">
         <a :href="url" class="text-lg">
@@ -15,10 +15,7 @@
         </a>
         <!--桌面浏览器下隐藏-->
         <div class="block lg:hidden">
-          <button
-            @click="open = !open"
-            class="text-zinc-800 dark:text-zinc-50"
-          >
+          <button @click="open = !open" class="text-zinc-800 dark:text-zinc-50">
             <svg
               fill="currentColor"
               class="w-4 h-4"
@@ -54,11 +51,10 @@
               </NuxtLink>
             </li>
           </ContentNavigation>
-          <li class="flex-1 flex flex-col lg:flex-row lg:justify-end lg:space-x-5">
-            <button
-              aria-label="Color Mode"
-              @click="onClick"
-            >
+          <li
+            class="flex-1 flex flex-col lg:flex-row lg:justify-end lg:space-x-5"
+          >
+            <button aria-label="Color Mode" @click="onClick">
               <Icon name="i-heroicons-magnifying-glass" class="w-5 h-5" />
             </button>
             <ColorModeSwitch />
@@ -71,7 +67,7 @@
       <div class="lg:hidden flex items-center">
         <!--一些web下隐藏的,手机端显示的-->
       </div>
-    </div>
+    </UContainer>
   </header>
 </template>
 

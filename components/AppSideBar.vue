@@ -1,23 +1,24 @@
 <template>
   <div>
-    <div class="card flex flex-col items-center p-4">
-      <img
+    <UCard>
+      <UAvatar
         :src="author?.avatar"
         :alt="author?.name"
-        class="rounded-full border border-zinc-300"
+        class="rounded-full border border-zinc-300 mx-auto block"
         width="100"
         height="100"
+        size = "3xl"
       />
-      <div class="font-semibold text-xl mt-2">
+      <div class="font-semibold text-xl mt-2 text-center">
         {{ author?.name }}
       </div>
       <div class="text-zinc-500 text-sm mt-2 text-center">
         {{ author?.description }}
       </div>
-      <div v-if="author?.socials && Object.entries(author.socials)" class="mt-2 space-x-5">
+      <div v-if="author?.socials && Object.entries(author.socials)" class="mt-2 space-x-5 text-center">
         <SocialIcons :socials="author.socials" />
       </div>
-    </div>
+    </UCard>
   </div>
 </template>
 

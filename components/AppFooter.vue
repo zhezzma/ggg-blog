@@ -1,9 +1,9 @@
 <template>
   <footer class="bg-zinc-200 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-500">
-    <div class="max-w-7xl p-5 mx-auto">
+    <UContainer class="py-5">
       <div class="flex justify-between">
         <div>
-          <h3 class="font-bold text-lg mb-4">Menu</h3>
+          <h3 class="font-bold text-lg mb-4">链接</h3>
           <ul>
             <li v-for="item in menu" :key="item.path">
               <NuxtLink
@@ -16,7 +16,7 @@
           </ul>
         </div>
         <div>
-          <h3 class="font-bold text-lg mb-4">Follow</h3>
+          <h3 class="font-bold text-lg mb-4">关注</h3>
           <div
             v-if="author?.socials && Object.entries(author.socials)"
             class="mt-2 space-x-5 text-2xl"
@@ -25,13 +25,13 @@
           </div>
         </div>
         <div v-if="newsletterEnabled">
-          <h3 class="font-bold text-lg mb-4">Subscribe</h3>
-          <p class="mb-4">Subscribe to get the latest posts by email.</p>
+          <h3 class="font-bold text-lg mb-4">订阅</h3>
+          <p class="mb-4">通过电子邮件获取最新文章</p>
           <p v-if="error" class="text-red-500 text-xs italic mb-2">
-            Subscription failed. Please retry later
+            订阅失败。请稍后重试
           </p>
           <p v-if="success" class="text-green-500 text-xs italic mb-2">
-            You have successfully subscribed
+            您已成功订阅
           </p>
 
           <form :action="formAction" method="post" target="_blank">
@@ -40,18 +40,20 @@
               name="fields[email]"
               autocomplete="email"
               type="email"
-              placeholder="Your email"
+              placeholder="welcome@hello.world"
               class="p-2 text-zinc-700 w-full"
               required
             />
             <input type="hidden" name="ml-submit" value="1" />
             <input type="hidden" name="anticsrf" value="true" />
-            <button
-              class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-zinc-50 font-bold py-2 px-4 rounded"
+            <UButton
+            icon="i-heroicons-pencil-square"
+    size="lg"
+              class="mt-2 w-full"
               @click.prevent="subscribe"
             >
-              Subscribe
-            </button>
+              订阅
+            </UButton>
           </form>
         </div>
       </div>
@@ -63,9 +65,14 @@
         &nbsp;{{ config.title }}
         <div>•</div>
         &nbsp; Powered by
-        <a href="https://github.com/zhezzma">zhezzma</a>
+        <a href="https://github.com/zhezzma">{{ author?.username }}</a>
+        <div>•</div>
+        <a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">{{ config.icp }} </a>
+        <div>•</div>
+        <img src="/images/beian.png" alt="" class="w-4 h-4">
+        <a :href="wanganUrl" rel="noopener" target="_blank">{{ config.wangan }} </a>
       </div>
-    </div>
+    </UContainer>
   </footer>
 </template>
 
@@ -78,6 +85,10 @@ const email = ref("");
 const success = ref(false);
 const error = ref(false);
 const author = findAuthor();
+
+const wanganUrl = "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode="+config.wangan.slice(5);
+
+
 async function subscribe() {
   const formData = new FormData();
   formData.append("fields[email]", email.value);

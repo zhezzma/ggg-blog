@@ -1,5 +1,5 @@
 <template>
-  <div class=" card p-5 ">
+  <UCard class="">
     <h1 class="text-4xl font-bold mb-8 text-center">存档</h1>
     <ContentList :query="query">
       <template #not-found>
@@ -20,7 +20,7 @@
         </div>
       </template>
     </ContentList>
-  </div>
+  </UCard>
 </template>
 
 <script setup lang="ts">

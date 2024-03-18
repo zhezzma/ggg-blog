@@ -1,12 +1,5 @@
 @import "github-markdown.css";
 
-.card {
-  @apply rounded-sm bg-zinc-50 
-  shadow-[0px_2px_8px_1px_rgba(9,9,11,0.20),0px_1px_0px_0px_rgba(9,9,11,0.1)_inset]
-  dark:bg-zinc-900 
-  dark:shadow-[0px_2px_8px_1px_rgba(0,_0,_0,_0.20),_0px_1px_0px_0px_rgba(255,_255,_255,_0.1)_inset] 
-  forced-colors:outline;
-}
 
 nav ul a {
   @apply w-full inline-block;
@@ -27,3 +20,5 @@ nav ul button {
 .navsd button {
   @apply py-1  w-full inline-block;
 }
+
+ 
