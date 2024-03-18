@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-zinc-200 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-500">
+  <footer class="bg-zinc-200 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-500">
     <div class="max-w-7xl p-5 mx-auto">
       <div class="flex justify-between">
         <div>

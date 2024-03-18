@@ -4,6 +4,7 @@ export default defineAppConfig({
   url: "",
   logo: "",
   pageSize:15,
+  descriptionSliceLength:300,
   authors: [
     {
       default: true,

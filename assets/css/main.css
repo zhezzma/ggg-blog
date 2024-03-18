@@ -1,33 +1,29 @@
 @import "github-markdown.css";
 
-:root {
-  --header-height: 65px;
-}
-
 .card {
-  @apply rounded-md bg-zinc-50 
+  @apply rounded-sm bg-zinc-50 
   shadow-[0px_2px_8px_1px_rgba(9,9,11,0.20),0px_1px_0px_0px_rgba(9,9,11,0.1)_inset]
   dark:bg-zinc-900 
   dark:shadow-[0px_2px_8px_1px_rgba(0,_0,_0,_0.20),_0px_1px_0px_0px_rgba(255,_255,_255,_0.1)_inset] 
   forced-colors:outline;
 }
 
-nav ul a{
+nav ul a {
   @apply w-full inline-block;
 }
-nav ul a,nav ul button {
-  @apply hover:text-zinc-500  dark:hover:text-zinc-300 ;
+nav ul a,
+nav ul button {
+  @apply hover:text-zinc-500  dark:hover:text-zinc-300;
 }
 .navsd {
-  @apply mt-3 divide-y border-t divide-zinc-200 dark:divide-zinc-700  border-zinc-200 dark:border-zinc-700;
+  @apply mt-3 divide-y divide-zinc-200 dark:divide-zinc-800;
 }
 .navsd li {
   @apply py-1;
 }
 .navsd li:last-child {
-  @apply divide-y divide-zinc-200 dark:divide-zinc-700 ;
+  @apply divide-y divide-zinc-200 dark:divide-zinc-800;
 }
 .navsd button {
-  @apply py-1  w-full inline-block ;
+  @apply py-1  w-full inline-block;
 }
-

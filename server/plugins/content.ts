@@ -55,7 +55,11 @@ export default defineNitroPlugin((nitroApp) => {
         //console.log(file._path, file._file);
       }
       //content模块提取的规则是##等前方的文字..如果标题下方直接是#等是没有descriptiond的
-      if (!file.description || file.description == "" || file.description.length <20) {
+      if (
+        !file.description ||
+        file.description == "" ||
+        file.description.length < 20
+      ) {
         file.description = extractTextValues(file);
       }
     }
@@ -64,15 +68,18 @@ export default defineNitroPlugin((nitroApp) => {
 
 function extractTextValues(json: any) {
   let result = "";
+  const config = useAppConfig();
+  const length = config.descriptionSliceLength || 200;
+
   const extractText = (node: any) => {
-    if (result.length > 200) return;
+    if (result.length > length) return;
     if (node.type === "text") {
       result += node.value;
     } else if (node.children && Array.isArray(node.children)) {
       node.children.forEach(extractText);
     }
-    if (result.length > 200) {
-      result = result.slice(0, 200); // Truncate to 200 chars if over the limit
+    if (result.length > length) {
+      result = result.slice(0, length); // Truncate to 200 chars if over the limit
     }
   };
 

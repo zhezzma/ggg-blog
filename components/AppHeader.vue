@@ -1,6 +1,6 @@
 <template>
   <header
-    class="ring-1 ring-zinc-300 dark:ring-zinc-800 sticky top-0 z-30 bg-zinc-50 dark:bg-zinc-900 mb-8"
+    class="shadow-lg shadow-zinc-300 dark:shadow-zinc-800   sticky top-0 z-30 bg-zinc-100 dark:bg-zinc-900 mb-8"
   >
     <div
       class="flex flex-col mx-auto lg:flex-row lg:max-w-7xl lg:space-x-10 items-center p-5"

@@ -39,7 +39,7 @@ page.value = 1;
     <ContentList :query="query">
       <template #default="{ list }">
         <div v-for="article in list" :key="article._path" class="card mb-8 p-4">
-          <div class="flex justify-between border-b mb-3 pb-3 border-b-zinc-300 dark:border-b-zinc-600">
+          <div class="flex justify-between border-b mb-3 pb-3 border-b-zinc-300 dark:border-b-zinc-800">
             <h2>
               <ULink
                 :to="article._path"
