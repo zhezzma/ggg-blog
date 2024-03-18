@@ -25,7 +25,6 @@ Entities
     })
     .WithoutBurst()
     .Run();
-
 ```
 
 b系统

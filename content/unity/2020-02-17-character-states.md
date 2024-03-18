@@ -48,7 +48,6 @@ public abstract class Attribute
                 Console.WriteLine(string.Format("{0} 属性为： HP {1} MP {2}",this.m_Name, this.HpTotal, this.MpTotal));
             }
         }
-
 ```
 
 ```
@@ -94,7 +93,6 @@ public class AttributeComponent:Attribute
                 m_AttributeList.Remove(attribute);
             }
         }
-
 ```
 
 ```
@@ -131,7 +129,6 @@ public void TestMethod1()
             basic.RemoveAttribute(weapon);
             basic.Show();
         }
-
 ```
 
 <https://blog.csdn.net/alistair_chow/article/details/53029909>

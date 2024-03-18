@@ -2,15 +2,11 @@
 title : "unity启动运行脚本流程"
 ---
 
-
-
 **性能分析：**
 
 所有尝试优化的操作都是从发现问题开始的，在谈论性能时，这是非常重要的。对一个应用进行性能分析，第一步是根据性能分析的结果，找出它的瓶颈。然后再优化项目中的用到的技术和资源的结构。
 
 提示：本节性能分析中出现的方法名称，都是从unity5.3中提取的，方法名可能在以后的Unity版本中发生变化。
-
-
 
 **工具：**
 
@@ -34,8 +30,6 @@ Xbox：Pix工具
 
 [Profiling with Instruments – Unity Blogblogs.unity3d.com!](https://blogs.unity3d.com/cn/2016/02/01/profiling-with-instruments/%3F_ga%3D2.53202159.65875105.1532310232-165234103.1528100648)
 
-
-
 **启动流程剖析：**
 
 当查看启动流程的时间时，有两个方法需要注意。在那些影响启动时间的配置文件、资源和工程代码中，这两个方法起着重要的作用。
@@ -43,8 +37,6 @@ Xbox：Pix工具
 在不同的平台上，启动时间是不同的。在大多数平台上，Splash Image显示的时间，就是启动的时间。
 
 ![img](../../public/images/2020-03-04-unity-startup/v2-e65aeff3106290ff9e3de0580ffa90ab_720w.jpg)
-
-
 
 上面的截图来自于在iOS设备上运行的一个示例项目。在此平台的startUnity方法中，请注意UnityInitApplicationGraphics和UnityLoadApplication方法。
 
@@ -54,17 +46,11 @@ UnityLoadApplication包含加载和初始化第一个场景的方法。在项目
 
 这些过程意味着，如果在项目的第一个场景中，在Awake方法中有长时间运行的代码，那么该代码就会增加项目的启动时间。为了避免这一问题，在Awake方法中不能放运行时间长的代码，或者把这些代码放到程序的其他其他生命周期里。
 
-
-
-
-
 **运行时流程分析：**
 
 在初始化启动之后的性能分析中，最主要的是PlayerLoop方法。这个是Unity的主循环，并且每一帧都会被执行一次。
 
 ![img](../../public/images/2020-03-04-unity-startup/v2-5c6c95216621d4ab86b26636ff9a019a_720w.jpg)
-
-
 
 上面的截图来自Unity5.4一个示例项目的性能分析。它展示了PlayerLoop中几个最有趣的方法。请注意，不同Unity版本之间，PlayerLoop中的方法名称可能有所不同。
 
@@ -72,11 +58,13 @@ PlayerRender是运行在Unity渲染系统中的方法。它包括对象剔除，
 
 BaseBehaviourManager调用了三个类型的CommonUpdate方法。它会调用当前场景中，挂在激活的物体上面的Monobehaviours里的特定方法。
 
-- CommonUpdate<UpdateManager> 回调 Update
-- CommonUpdate<LateUpdateManager> 回调 LateUpdate
-- CommonUpdate<FixedUpdateManager> 如果勾选了物理系统，就会回调 FixedUpdate
+- CommonUpdate 回调 Update
 
-通常，检测BaseBehaviourManager::CommonUpdate<UpdateManager>这类方法是最有趣的，因为它是多数Unity项目脚本运行的入口。
+- CommonUpdate 回调 LateUpdate
+
+- CommonUpdate 如果勾选了物理系统，就会回调 FixedUpdate
+
+通常，检测BaseBehaviourManager::CommonUpdate这类方法是最有趣的，因为它是多数Unity项目脚本运行的入口。
 
 有几个其他的方法也可以注意一下：
 
@@ -90,33 +78,25 @@ PhysicsManager::FixedUpdate执行PhysX物理引擎。它主要涉及到执行Phy
 
 如果项目有用到2D物理系统。那么在Physics2DManager::FixedUpdate中也会出现类似的调用。
 
-
-
 **脚本方法剖析：**
 
 当脚本用IL2CPP编译跨平台编译时，找到包含ScriptingInvocation对象这行。这是Unity为了执行脚本代码，从内部代码过渡到运行时脚本的一个时间点（注意：从技术上讲，通过运行IL2CPP，C#和JS脚本也变成了本地代码。然而，这种编译的代码主要通过IL2CPP运行时框架执行方法，这跟手写的C++代码不太相似）。
 
 ![img](../../public/images/2020-03-04-unity-startup/v2-ddde913f040c5de47824f8abaca2e978_720w.jpg)
 
-
-
 上面的截图来自一个Unity5.4示例项目中的另一个的性能分析。RuntimeInvoker_Void这一行下面的所有方法都是C#脚本编译的，它们每帧都会被执行一次。
 
-分析报告阅读起来比较容易：每一个都是类名+“_”+方法名。在上图中，我们可以看到EventSysten.Update，PlayerShooting.Update和几个其他的Update方法，这些是大多数MonoBehaviours脚本中比较标准的Unity Update回调。
+分析报告阅读起来比较容易：每一个都是类名+“\_”+方法名。在上图中，我们可以看到EventSysten.Update，PlayerShooting.Update和几个其他的Update方法，这些是大多数MonoBehaviours脚本中比较标准的Unity Update回调。
 
 展开这些方法，可以清楚的看到那些正在占用CPU的方法。其中也会包括项目中被用到的Unity API和C#类库的方法。
 
 上图的分析中，也显示了StandaloneInputModule.Process，这个方法会在每一帧都用射线穿过整个UI，为了检测是否有点击事件或者滑动事件触发。这个对性能的主要影响是需要遍历所有的UI元素，并且监测鼠标的位置是否在UI元素的边界内。
-
-
 
 **资源加载：**
 
 资源加载主要是通过SerializedFile::ReadObject方法来实现的。在对CPU性能分析时，就可以找到这个方法。SerializedFile::ReadObject通过Transfer方法，把文件的二进制数据关联到Unity的序列化系统。所有的Asset类型中，都能找到这个Transfer方法，比如Texttures，MonoBehaviours 和Particle Systems。
 
 ![img](../../public/images/2020-03-04-unity-startup/v2-05563390f8cb569523e89841537c0e8f_720w.jpg)
-
-
 
 在上面的截图中，一个场景正在被加载。SerializedFile::ReadObject下面调用的不同Transfer方法表明了Unity正在读取并且反序列化场景中所有的Assets。
 
@@ -126,13 +106,9 @@ PhysicsManager::FixedUpdate执行PhysX物理引擎。它主要涉及到执行Phy
 
 注意，当克隆objects时，Transfer也会被调用（在性能分析时出现的CloneObject就是）。如果CloneObject方法下面出现了Transfer方法，这说明资源不是正在从储存器上加载，而是在克隆老的对象。这个过程是：Unity先把老对象序列化，再反序列化数据作为新的对象。
 
-
-
 本文翻译自Unity官方文档：
 
 [Unity - Manual: Profilingdocs.unity3d.com!](https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity1.html)
-
-
 
 **Q1：第一次启动项目会有冷启动时间过长的情况，请问该怎么优化？**
 
@@ -156,8 +132,6 @@ PhysicsManager::FixedUpdate执行PhysX物理引擎。它主要涉及到执行Phy
 > Native层增加界面，减少黑屏等待，提升玩家体验。这个并不能真正解决问题，只是一种缓解手段，等到优化做到位了，其实也就不需要了。
 > 说的内容大都是启动时间而非冷启动，供题主参考。建议题主多看看Unity进程的输出log，可能会有意外发现，通常情况下，不使用Resources的方式的话，在没Bug的情况下冷启动时间应该不会很长，我们因为没怎么用这种方式，所以不是很清楚。这个链接可以参考下：https://www.jianshu.com/p/4366da6dd4a1
 
-
-
 ## 脚本编译顺序
 
 对于大型项目来说，这确实是大家经常遇到的情况。一般来说，Unity Editor会按照脚本的依赖关系编译代码，其主要分为以下四个步骤：
@@ -166,7 +140,5 @@ PhysicsManager::FixedUpdate执行PhysX物理引擎。它主要涉及到执行Phy
 编译项目中所有剩余的Runtime Script（Editor文件夹以外Script；
 编译剩余Script（即Editor文件夹中Script）。
 知道了Unity编辑器的脚本编译特性后，我们则建议研发团队可以将一些长时间不需要改动的脚本代码（比如各种插件代码）放入到Standard Assets、Pro Standard Assets或Plugins文件夹中，这样这些代码只需要编译一次，后续的时间就都能节省下来。有朋友做过测试，在他们的项目中经过上面的改动，原来项目每次的编译时间从23s下降到7s。想想看，这将节省你和你的团队多少时间！
-
-
 
 https://docs.unity3d.com/Manual/ScriptCompileOrderFolders.html

@@ -6,17 +6,17 @@ Raycasters 用来检测当前事件发送给哪个对象，检测原理就是 Ra
 
 在 Unity Raycasters 中有三种类型的 Raycasters:
 
--   Graphic Raycaster - 存在于 Canvas 下，用于检测 Canvas 中所有的物体
+- Graphic Raycaster - 存在于 Canvas 下，用于检测 Canvas 中所有的物体
 
--   Physics 2D Raycaster - 用于检测 2D 物体
+- Physics 2D Raycaster - 用于检测 2D 物体
 
--   Physics Raycaster - 用于检测 3D 物体
+- Physics Raycaster - 用于检测 3D 物体
 
 接下来，就来分析一下各个类型 Raycaster 的源码来看看其的工作流程。
 
 Raycast 在 Event System 流程中所处的位置大致如下图:
 
-![unity\_event\_system\_raycaster.png](../../public/images/2019-08-12-ugui-Raycasters/unity_event_system_raycaster.png)
+![unity_event_system_raycaster.png](../../public/images/2019-08-12-ugui-Raycasters/unity_event_system_raycaster.png)
 
 ## BaseRaycaster 类
 
@@ -79,11 +79,11 @@ Physics2DRaycaster 类继承自 PhysicsRaycaster，主要就是 `Raycast` 方法
 
 第二处同 PhysicsRaycaster 的不同之处是在返回构造 RaycastResult 时，填充的部分值不一样，包括以下几个:
 
--   distance，这个值是摄像机到射线检测碰撞点的距离，而在 PhysicsRaycaster 中是 RaycastHit 的 `distance` 值(射线起点在近裁剪面发出到碰撞点的距离)。
+- distance，这个值是摄像机到射线检测碰撞点的距离，而在 PhysicsRaycaster 中是 RaycastHit 的 `distance` 值(射线起点在近裁剪面发出到碰撞点的距离)。
 
--   sortingLayer，这个值是当前对象 SpriteRenderer 组件中的 `sortingLayerID` 值，在 PhysicsRaycaster 为 0。
+- sortingLayer，这个值是当前对象 SpriteRenderer 组件中的 `sortingLayerID` 值，在 PhysicsRaycaster 为 0。
 
--   sortingOrder，这个同样为当前对象 SpriteRenderer 组件中的 `sortingOrder` 值，在 PhysicsRaycaster 为 0。
+- sortingOrder，这个同样为当前对象 SpriteRenderer 组件中的 `sortingOrder` 值，在 PhysicsRaycaster 为 0。
 
 ## Graphic Raycaster
 
@@ -93,11 +93,11 @@ Graphic Raycaster 用于射线检测 Canvas 中的 Graphic 对象物体，通常
 
 GraphicRaycaster 类的成员属性很少，除了继承 BaseRaycaster 类的一些属性和方法外，它还拥有以下一些常用的属性或方法:
 
-| 属性                         | 描述                                                         |
-| -------------------------- | ---------------------------------------------------------- |
-| `Ignore Reversed Graphics` | 射线检测时是否忽略背向的 Graphics                                      |
-| `Blocked Objects`          | 哪些类型的对象会阻挡 Graphic raycasts                                |
-| `Blocking Mask`            | 哪些 Layer 会阻挡 Graphic raycasts(对 `Blocked Objects` 指定的对象生效) |
+|属性|描述|
+|-|-|
+|`Ignore Reversed Graphics`|射线检测时是否忽略背向的 Graphics|
+|`Blocked Objects`|哪些类型的对象会阻挡 Graphic raycasts|
+|`Blocking Mask`|哪些 Layer 会阻挡 Graphic raycasts(对 `Blocked Objects` 指定的对象生效)|
 
 不同于 PhysicsRaycaster 和 Physics2DRaycaster 类中直接使用父类的 `sortOrderPriority` 方法和 `renderOrderPriority`，GraphicRaycaster 覆写了这两个方法，并且当 Canvas 的 render mode 设置为 `RenderMode.ScreenSpaceOverlay` 时，上面两个方法分别返回 canvas 的 sortingOrder 以及 rootCanvas 的 renderOrder。
 
@@ -135,7 +135,7 @@ else
 
 可以看出，当平台支持 MultiDisplay 时，如果用户操作的不是当前的 Display，那么所有的其他 Display 上产生的事件都会被舍弃。
 
-然后将屏幕坐标转换到 Camera 视窗坐标下。如果 eventCamera 不为空，则使用 `Camera.ScreenToViewportPoint` 方法转换坐标，否则直接使用当前 Display 的宽高除以 eventPosition 转换为视窗坐标(\[0,1]之间)。转换后的坐标若超出 Cmera 的范围(0 - 1)，则舍弃该事件。
+然后将屏幕坐标转换到 Camera 视窗坐标下。如果 eventCamera 不为空，则使用 `Camera.ScreenToViewportPoint` 方法转换坐标，否则直接使用当前 Display 的宽高除以 eventPosition 转换为视窗坐标(\[0,1\]之间)。转换后的坐标若超出 Cmera 的范围(0 - 1)，则舍弃该事件。
 
 #### Blocked Objects 和 Blocked Mask 出场
 
@@ -161,9 +161,9 @@ if (canvas.renderMode != RenderMode.ScreenSpaceOverlay && blockingObjects != Blo
 
 当 Canvas renderMode 不为 `RenderMode.ScreenSpaceOverlay` 并且设置了 blockingObjects，此时就会 Blocked Objects 和 Blocked Mask 就会生效。
 
--   如果 blockingObjects 包含了 `BlockingObjects.ThreeD` 那么则会使用 `ReflectionMethodsCache.Singleton.raycast3DAll` 方法计算 hitDistance(PhysicsRaycaster 中也使用的该方法进行射线检测)。
+- 如果 blockingObjects 包含了 `BlockingObjects.ThreeD` 那么则会使用 `ReflectionMethodsCache.Singleton.raycast3DAll` 方法计算 hitDistance(PhysicsRaycaster 中也使用的该方法进行射线检测)。
 
--   如果 blockingObjects 也包含了 `BlockingObjects.TwoD`，那么会使用 `ReflectionMethodsCache.Singleton.getRayIntersectionAll` 方法(Physics2DRaycaster 射线检测使用)再计算 hitDistance。
+- 如果 blockingObjects 也包含了 `BlockingObjects.TwoD`，那么会使用 `ReflectionMethodsCache.Singleton.getRayIntersectionAll` 方法(Physics2DRaycaster 射线检测使用)再计算 hitDistance。
 
 具体的计算过程大致是: 这上面的代码中 raycast3DAll 时指定了射线检测层 `m_BlockingMask`，这个参数就是自定义设定的 `Blocking Mask`，属于 block mask 的对象在这里就会就行射线检测，并得到最小的一个 hitDistance；**后面对所有的 Graphics 进行射线检测时，如果检测结果 distance 大于 hitDistance，那么那个结果会被舍弃**。如此一来，`Blocking Mask` 就起到了阻挡的作用，属于这个 layer 的所有对象的一旦被射线检测成功并得到 hitDistance，PhysicsRaycaster 最后的射线检测结果都只会包含这个 hitDistance 距离以内的对象。
 
@@ -206,9 +206,9 @@ private static void Raycast(Canvas canvas, Camera eventCamera, Vector2 pointerPo
 
 对于节点对象，首先获取其绑定的所有组件，依次**遍历**判断组件:
 
--   当组件是 `Canvas` 并且其 overrideSorting 为 `true` 则指定: 若在当前节点绑定的一系列的组件中都未能成功唤起检测，则当前节点组件**遍历**结束后将跳出节点**递归**并默认返回 `true`。
+- 当组件是 `Canvas` 并且其 overrideSorting 为 `true` 则指定: 若在当前节点绑定的一系列的组件中都未能成功唤起检测，则当前节点组件**遍历**结束后将跳出节点**递归**并默认返回 `true`。
 
--   如果组件是实现了 `ICanvasRaycastFilter` 接口，则判断组件是否是 `CanvasGroup`。若是 `CanvasGroup` 且设置了 ignoreParentGroups 为 `true`，那么对于接下来的所有 CanvasGroup 组件将不会调用 `IsRaycastLocationValid` 方法检测；若 CanvasGroup 都未设置 `ignoreParentGroups`或者不包含 CanvasGroup 组件，则直接调用组件实现的 `IsRaycastLocationValid` 方法计算是否射线检测成功。
+- 如果组件是实现了 `ICanvasRaycastFilter` 接口，则判断组件是否是 `CanvasGroup`。若是 `CanvasGroup` 且设置了 ignoreParentGroups 为 `true`，那么对于接下来的所有 CanvasGroup 组件将不会调用 `IsRaycastLocationValid` 方法检测；若 CanvasGroup 都未设置 `ignoreParentGroups`或者不包含 CanvasGroup 组件，则直接调用组件实现的 `IsRaycastLocationValid` 方法计算是否射线检测成功。
 
 从整个 Graphic.Raycast 检测过程可以看出，检测是自当前 graphic 节点开始，一旦检测到某个节点添加实现了 `ICanvasRaycastFilter` 接口且 `IsRaycastLocationValid` 方法返回 `false` 则此 graphic 检测失败并结束检测；否则还会继续向上递归检测父节点，当所有节点(绑定了 Canvas 组件并设置了 `Canvas.overrideSorting` 为 `true`的节点会截止此次检测)都射线检测成功或是不需要使用 `IsRaycastLocationValid` 方法进行检测，则此次 Graphic.Raycast 成功。
 
@@ -220,16 +220,16 @@ private static void Raycast(Canvas canvas, Camera eventCamera, Vector2 pointerPo
 
 最后对检测结果再过滤。如果设置了 `Ignore Reversed Graphics` 为 true，则将背向 Camera 的对象过滤掉，这里面又分为两种情况:
 
--   Camera 为空，直接判断当前 Graphic 方向与正方向 `Vector3.forward` 是否相交，如下:
+- Camera 为空，直接判断当前 Graphic 方向与正方向 `Vector3.forward` 是否相交，如下:
 
-    ```
-    var dir = go.transform.rotation * Vector3.forward;
-    appendGraphic = Vector3.Dot(Vector3.forward, dir) > 0;
-    ```
+  ```
+  var dir = go.transform.rotation * Vector3.forward;
+  appendGraphic = Vector3.Dot(Vector3.forward, dir) > 0;
+  ```
 
-    首先将 `Vector3.forward` 绕着当前 Graphic 的 rotation 旋转得到 Graphic 的正方向，然后通过点积判断 Graphic 正方向是否与默认正方向(没有 Camera 所以默认正方向为 `Vector3.forward`)相交。点积大于 0 则相交，说明当前 Graphic 可以加入射线加测结果中。
+  首先将 `Vector3.forward` 绕着当前 Graphic 的 rotation 旋转得到 Graphic 的正方向，然后通过点积判断 Graphic 正方向是否与默认正方向(没有 Camera 所以默认正方向为 `Vector3.forward`)相交。点积大于 0 则相交，说明当前 Graphic 可以加入射线加测结果中。
 
--   当 Camera 不为空，就使用 Camera 的正方向与 Graphic 的正方向比较是否相交。
+- 当 Camera 不为空，就使用 Camera 的正方向与 Graphic 的正方向比较是否相交。
 
 #### distance 检测是最终一道坎
 
@@ -275,7 +275,7 @@ public void RaycastAll(PointerEventData eventData, List<RaycastResult> raycastRe
 
 场景中可以存在一个或多个 Raycaster。当存在多个时，如果需要发起射线检测，那么每个处于 Active 状态的 Raycaster 都会工作，所有 Raycaster 检测得到的结果都会存放在 `raycastResults` 中(这些 RaycastResult 都是在各自射线检测器中根据 distance 从小到大排过序的)。方法最后使用自定义 Comparer 对所有的 RaycastResult 排序。`s_RaycastComparer` 有以下几种比较流程:
 
--   两个 RaycastResult 检测所在的 Raycaster 不同
+- 两个 RaycastResult 检测所在的 Raycaster 不同
 
 首先比较两个对象的 Camera 的 depth。在渲染中，Camera depth 越小会越先渲染，越大越往后渲染，因此对于射线检测来说，Camera 的 depth 越大，它对应的物体应该先于 Camera depth 小的物体进行射线检测，检测得到的结果也应排在前面。代码如下:
 
@@ -303,7 +303,7 @@ return rhs.module.renderOrderPriority.CompareTo(lhs.module.renderOrderPriority);
 
 renderOrderPriority 和 sortOrderPriority 类似，仅在 GraphicRaycaster 类中被覆写，也只有在 Canvas 的 renderMode 设置为 `RenderMode.ScreenSpaceOverlay` 时才返回 `canvas.rootCanvas.renderOrder`，这是因为 Canvas 在其他几种 renderMode 下，渲染的先后顺序都和距离摄像机的距离有关。所以 renderOrderPriority 比较也是按照从大到小的顺序得到最终的结果。
 
--   同属于一个 Raycaster 检测得到，但是它们的 sortingLayer 不一样
+- 同属于一个 Raycaster 检测得到，但是它们的 sortingLayer 不一样
 
 对于 PhysicsRaycaster 检测得到的对象，sortingLayer 都为 0。
 
@@ -319,7 +319,7 @@ return rid.CompareTo(lid);
 
 通过 `SortingLayer.GetLayerValueFromID` 方法计算 sortingLayer 最终的 sorting layer 值，同样是按照降序排列，因此计算得到的 sorting layer 值越大越先排在前面。
 
--   sortingLayer 也相同，使用 sortingOrder 比较
+- sortingLayer 也相同，使用 sortingOrder 比较
 
 sortingOrder 和 sortingLayer 类似，PhysicsRaycaster 检测得到的对象 sortingOrder 为 0；Physics2DRaycaster 检测得到的对象是 SpriteRenderer 中的 sortingOrder；GraphicRaycaster 检测所得是所在 Canvas 的 sortingOrder。最终 sortingOrder 越大的对象越排前面。代码如下:
 
@@ -327,11 +327,11 @@ sortingOrder 和 sortingLayer 类似，PhysicsRaycaster 检测得到的对象 so
 return rhs.sortingOrder.CompareTo(lhs.sortingOrder);
 ```
 
--   sortingOrder 相同，使用 depth 比较
+- sortingOrder 相同，使用 depth 比较
 
 PhysicsRaycaster 和 Physics2DRaycaster 中 depth 都被设置为了 0；GraphicRaycaster 检测所得的对象的 depth 就是继承自 Graphic 类的对象所在的 Graphic 的 depth，即 Canvas 下所有 Graphic 深度遍历的顺序。比较同样也是按照降序进行的，因此越嵌套在靠近 Canvas 的对象越排在前面。
 
--   depth 相同，使用 distance 比较
+- depth 相同，使用 distance 比较
 
 PhysicsRaycaster 中的 distance 就是 RaycastHit 的 distance(射线起点到射线碰撞点的距离)。
 
@@ -349,7 +349,7 @@ distance = Vector3.Dot(transForward, trans.position - currentEventCamera.transfo
 
 距离 distance 越小越靠前。
 
--   最后如果上述情况都不能满足，使用 index 比较。先被射线检测到的对象排在前面。
+- 最后如果上述情况都不能满足，使用 index 比较。先被射线检测到的对象排在前面。
 
 Raycaster 后段部分的流程: 取排过序的 RaycastResult 中第一个结果作为响应事件的输入事件的 pointerCurrentRaycast，根据它来在 Messaging System 中分发事件，大致代码如下:
 

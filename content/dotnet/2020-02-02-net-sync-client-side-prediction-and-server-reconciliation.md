@@ -56,13 +56,13 @@ title:  "快节奏多人游戏同步(2)-客户端预测与服务器校对"
 
 客户端具体如何处理，这里有一个统一的处理方式：
 
--   根据server的new state更新#1里的缓存状态
+- 根据server的new state更新#1里的缓存状态
 
--   回滚input到#1，将#1之后的所有缓存的操作都应用到#1的new state中进行计算，得到最新的结果
+- 回滚input到#1，将#1之后的所有缓存的操作都应用到#1的new state中进行计算，得到最新的结果
 
--   客户端根据最新的结果进行更新
+- 客户端根据最新的结果进行更新
 
--   将#1的状态和input 从缓存buffer里删除
+- 将#1的状态和input 从缓存buffer里删除
 
 ## PART 5 误差
 
@@ -76,4 +76,4 @@ title:  "快节奏多人游戏同步(2)-客户端预测与服务器校对"
 
 当使用权威服务器的时候，你需要给玩家即时的响应，即使是当在等待服务器处理出入。为了达到这样的目的，客户端模拟出输入的结果，当收到服务器的回复时，客户端的游戏状态需要通过服务器的回复和还未处理的输入进行重新计算。
 
--   <http://www.gabrielgambetta.com/client-side-prediction-server-reconciliation.html>
+- <http://www.gabrielgambetta.com/client-side-prediction-server-reconciliation.html>

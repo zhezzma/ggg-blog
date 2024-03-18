@@ -62,9 +62,9 @@ abp的dbcontext是分成两种的,一个是程序运行的dbcontext,一个是数
 
 ## 为什么这样设计?
 
--   为了模块间不产生依赖,例如用户表,迁移dbcontext中使用了IdentityUser,而运行的dbcontext使用了appuser进行了对其的映射,<https://github.com/abpframework/abp/issues/1998>
+- 为了模块间不产生依赖,例如用户表,迁移dbcontext中使用了IdentityUser,而运行的dbcontext使用了appuser进行了对其的映射,<https://github.com/abpframework/abp/issues/1998>
 
--   如何为user添加属性.<https://github.com/abpframework/abp/issues/2453>
+- 如何为user添加属性.<https://github.com/abpframework/abp/issues/2453>
 
 # 如何共用user
 

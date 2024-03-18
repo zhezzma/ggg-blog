@@ -2,7 +2,7 @@
 stitle : "IdentityServer使用指南"
 ---
 
-DotHass.Lobby.Domain\IdentityServer\IdentityServerDataSeedContributor.cs 中 CreateClientsAsync()
+DotHass.Lobby.Domain\\IdentityServer\\IdentityServerDataSeedContributor.cs 中 CreateClientsAsync()
 
 会在dataseed的时候生成默认数据
 
@@ -16,15 +16,15 @@ After: `Postman -> Preferences -> General -> SSL certificate validation -> OFF` 
 
 <https://localhost:5000/.well-known/openid-configuration>
 
-1.  <http://localhost:5000/connect/token>
+1. <http://localhost:5000/connect/token>
 
-    ![image-20200613165200371](../../public/images/2020-06-11-IdentityServer-use/image-20200613165200371.png)
+   ![image-20200613165200371](../../public/images/2020-06-11-IdentityServer-use/image-20200613165200371.png)
 
-2.  <http://localhost:5000/connect/userinfo> 将type设置成bearer token,token填入上面获得的access\_token
+2. <http://localhost:5000/connect/userinfo> 将type设置成bearer token,token填入上面获得的access_token
 
 ![image-20200613165246959](../../public/images/2020-06-11-IdentityServer-use/image-20200613165246959.png)
 
-3.注意发布release后.配置表中的  ..如果配置错误将会认证失败
+3\.注意发布release后.配置表中的  ..如果配置错误将会认证失败
 
 appsettings.json
 
@@ -64,7 +64,7 @@ appsettings.Development.json
 
 还要注意请求的域名是否一样,127.0.0.1或者localhost...可能返回结果即使一样.但是不能授权.
 
-使用<http://jwt.calebb.net/解析看下access_token>
+使用[http://jwt.calebb.net/解析看下access_token](http://jwt.calebb.net/%E8%A7%A3%E6%9E%90%E7%9C%8B%E4%B8%8Baccess_token)
 
 ```
 {

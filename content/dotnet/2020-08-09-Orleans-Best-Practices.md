@@ -69,10 +69,10 @@ Orleans.Storage.InconsistentStateException: ETag mismatch - tried with ETag: a62
 
 解决方案:
 
--   不要设置duetime为0
+- 不要设置duetime为0
 
--   或者不要在OnActivateAsync中RegisterTimer,在Activate后再RegisterTimer
+- 或者不要在OnActivateAsync中RegisterTimer,在Activate后再RegisterTimer
 
 # 相关链接
 
--   <https://dotnet.github.io/orleans/Documentation/resources/Best_Practices.html>
+- <https://dotnet.github.io/orleans/Documentation/resources/Best_Practices.html>

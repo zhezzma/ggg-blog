@@ -2,16 +2,16 @@
 title:  "xlua注入源码解读"
 ---
 
--   **让C#代码支持热更的流程**
+- **让C#代码支持热更的流程**
 
-1.  Generate Code
-    这一步主要根据是根据C#类中需要支持热更的方法生成其对应的委托方法，但是并不是每个方法对应一个委托，而是根据调用参数和返回参数公用委托。
+1. Generate Code
+   这一步主要根据是根据C#类中需要支持热更的方法生成其对应的委托方法，但是并不是每个方法对应一个委托，而是根据调用参数和返回参数公用委托。
 
-2.  Hotfix Inject
-    这一步主要是对Unity编译出的Dll中的C#类添加判断条件，以此来选择调用Lua中的修复方法还是直接执行C#代码
+2. Hotfix Inject
+   这一步主要是对Unity编译出的Dll中的C#类添加判断条件，以此来选择调用Lua中的修复方法还是直接执行C#代码
 
--   **Generate Code 实现和生成结果**
-    在Gen代码阶段，对热更生效的部分逻辑，基本就是根据之前在代码中标记了HotfixAttribute的类进行收集，然后使用XLua的模板代码生成器，生成对应名为DelegateBridge类。\_\_Gen\_Delegate\_Imp这个就是到时候要重复使用到的映射到Lua中function的委托。
+- **Generate Code 实现和生成结果**
+  在Gen代码阶段，对热更生效的部分逻辑，基本就是根据之前在代码中标记了HotfixAttribute的类进行收集，然后使用XLua的模板代码生成器，生成对应名为DelegateBridge类。\__Gen_Delegate_Imp这个就是到时候要重复使用到的映射到Lua中function的委托。
 
 ```csharp
 public void __Gen_Delegate_Imp0()
@@ -23,12 +23,12 @@ public void __Gen_Delegate_Imp0()
 }
 ```
 
-生成的代码就是先设置errorFuncRef（异常回调），luaReference（Lua方法）。如果在XLua中设置了热更修复代码，那么就会在C#中生成一个DelegateBridge，而其luaReference的指向就是Lua中的方法，所以这个只能调用指定的\_\_Gen\_Delegate\_Imp，调用其他会报错。
+生成的代码就是先设置errorFuncRef（异常回调），luaReference（Lua方法）。如果在XLua中设置了热更修复代码，那么就会在C#中生成一个DelegateBridge，而其luaReference的指向就是Lua中的方法，所以这个只能调用指定的\__Gen_Delegate_Imp，调用其他会报错。
 
--   **Hotfix Inject**
-    这一步是在Unity为C#代码生成完对应dll之后，由XLua再来对dll注入一些判断条件式来完成是否进行Lua调用的行为。
-    判断方法很简单，检查对应类静态字段是否有DelegateBridge对象。
-    实现如下：
+- **Hotfix Inject**
+  这一步是在Unity为C#代码生成完对应dll之后，由XLua再来对dll注入一些判断条件式来完成是否进行Lua调用的行为。
+  判断方法很简单，检查对应类静态字段是否有DelegateBridge对象。
+  实现如下：
 
 ```csharp
 bool injectMethod(MethodDefinition method, HotfixFlagInTool hotfixType)
@@ -228,8 +228,8 @@ static string getDelegateName(MethodDefinition method)
 }
 ```
 
--   **xlua.hotfix**在完成生成代码和注入后，只要在Lua中调用xlua.hotfix或util.hotfix\*ex方法就可以实现C#代码热更了。\*hotfix和hotfixex的区别在与是否可以调用原C#代码，其实ex的实现也是调用了hotfix，在下面将分析hotfix和hotfix\_ex的实现原理。
-    先分析下hotfix的Lua代码，代码在第一篇文章中的实例化lua中：
+- **xlua.hotfix**在完成生成代码和注入后，只要在Lua中调用xlua.hotfix或util.hotfix\*ex方法就可以实现C#代码热更了。\*hotfix和hotfixex的区别在与是否可以调用原C#代码，其实ex的实现也是调用了hotfix，在下面将分析hotfix和hotfix_ex的实现原理。
+  先分析下hotfix的Lua代码，代码在第一篇文章中的实例化lua中：
 
 ```text
      init_xlua.lua
@@ -440,11 +440,11 @@ static string getDelegateName(MethodDefinition method)
 
 这样在进行调用hotfix后，对应的要修复的类的静态字段就会被设置上对应的DelegateBridge对象，然后在C#代码执行到对应的需要热更修复的方法时候，会先执行我们注入的IL代码，检查是否有对应的DelegateBridge。那么就是调用DelegateBridge中对应的方法，方法中包含的reference就是Lua对应的function，这样就执行到了lua中去，实现了热更。
 
--   **util.hotfix\_ex的实现**
-    其实现直白的来讲就是在调用util.hotfix\_ex(functionB)时候，真正设置的是一个中间函数A，它被设置为对应方法的热更修复函数。
-    在调用A进行热更时候，它先设置这个方法的热更方法为空，然后调用原先设置的functionB，当functionB调用完后，然后再设置回热更方法为A，那么就能实现在热更修复方法functionB中调用原先的方法。
-    因为设置这些参数都是带反射的，所以在高频场景是有性能消耗的。
-    代码实现如下：
+- **util.hotfix_ex的实现**
+  其实现直白的来讲就是在调用util.hotfix_ex(functionB)时候，真正设置的是一个中间函数A，它被设置为对应方法的热更修复函数。
+  在调用A进行热更时候，它先设置这个方法的热更方法为空，然后调用原先设置的functionB，当functionB调用完后，然后再设置回热更方法为A，那么就能实现在热更修复方法functionB中调用原先的方法。
+  因为设置这些参数都是带反射的，所以在高频场景是有性能消耗的。
+  代码实现如下：
 
 ```lua
 local function hotfix_ex(cs, field, func)
@@ -465,4 +465,4 @@ local function hotfix_ex(cs, field, func)
 end
 ```
 
--   **结束语**整个Hotfix的实现也分析完了，后续的文章将继续分析，XLua中的各种优化技巧实现，比如无GC传值，模板生成技术。
+- **结束语**整个Hotfix的实现也分析完了，后续的文章将继续分析，XLua中的各种优化技巧实现，比如无GC传值，模板生成技术。

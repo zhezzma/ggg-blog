@@ -120,6 +120,6 @@ server {
 
 ## 参考链接
 
--   [Proxying Cockpit over nginx · cockpit-project/cockpit Wiki (github.com)](https://github.com/cockpit-project/cockpit/wiki/Proxying-Cockpit-over-nginx)
+- [Proxying Cockpit over nginx · cockpit-project/cockpit Wiki (github.com)](https://github.com/cockpit-project/cockpit/wiki/Proxying-Cockpit-over-nginx)
 
--   <https://cloud.tencent.com/document/product/400/35244>
+- <https://cloud.tencent.com/document/product/400/35244>

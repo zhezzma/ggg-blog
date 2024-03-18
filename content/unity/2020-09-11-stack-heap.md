@@ -28,49 +28,49 @@ title : "堆栈内存Stack和堆内存Heap"
 
 ### **值类型:**
 
--   bool
+- bool
 
--   byte
+- byte
 
--   char
+- char
 
--   decimal
+- decimal
 
--   double
+- double
 
--   enum
+- enum
 
--   float
+- float
 
--   int
+- int
 
--   long
+- long
 
--   sbyte
+- sbyte
 
--   short
+- short
 
--   struct
+- struct
 
--   uint
+- uint
 
--   ulong
+- ulong
 
--   ushort
+- ushort
 
 它们都衍生于System.ValueType。
 
 ### **引用类型:**
 
--   class
+- class
 
--   interface
+- interface
 
--   delegate
+- delegate
 
--   object
+- object
 
--   string
+- string
 
 它们都衍生于System.Object。当然object就是System.Object。
 
@@ -82,9 +82,9 @@ title : "堆栈内存Stack和堆内存Heap"
 
 ## 两个黄金规则
 
-1.  引用类型永远存储在堆里。
+1. 引用类型永远存储在堆里。
 
-2.  `值类型`和`指针`永远存储在它们声明时所在的`堆`或`栈`里。
+2. `值类型`和`指针`永远存储在它们声明时所在的`堆`或`栈`里。
 
 ## 栈工作原理
 
@@ -258,11 +258,11 @@ public int ReturnValue2()
 
 当我们调用一个方法时会发生以下情形：
 
-1.  栈会分配一块内存空间给程序执行所需要的信息(我们叫它栈结构Stack Frame)。一个栈结构包含方法调用地址(指针)，它以一个GOTO指令的形式存在栈里。因此，当程序执行完方法(method)时，它会知道怎么样返回进而曳继续执行代码。
+1. 栈会分配一块内存空间给程序执行所需要的信息(我们叫它栈结构Stack Frame)。一个栈结构包含方法调用地址(指针)，它以一个GOTO指令的形式存在栈里。因此，当程序执行完方法(method)时，它会知道怎么样返回进而曳继续执行代码。
 
-2.  方法的所有参数将被复制到栈里，这是我们将要更加详细介绍的部分。
+2. 方法的所有参数将被复制到栈里，这是我们将要更加详细介绍的部分。
 
-3.  控制被传递到JIT编译过的方法里，同时线程开始执行代码。此时，我们将有另一个方法呈现在栈结构的“回调栈”里。
+3. 控制被传递到JIT编译过的方法里，同时线程开始执行代码。此时，我们将有另一个方法呈现在栈结构的“回调栈”里。
 
 ```csharp
 public int AddFive(int pValue)
@@ -431,11 +431,11 @@ public void Go()
 
 ![img](../../public/images/2020-09-11-stack-heap/20131127071131421)
 
-1.  开始调用Go()，栈分配一块内存空间给x。
+1. 开始调用Go()，栈分配一块内存空间给x。
 
-2.  执行行到DoSomething()，栈分配一块内在空间给pValue。
+2. 执行行到DoSomething()，栈分配一块内在空间给pValue。
 
-3.  x的值是堆中MyInt对应在栈里的内存地址，复制x给pValue。
+3. x的值是堆中MyInt对应在栈里的内存地址，复制x给pValue。
 
 因此，我们用pValue改变MyInt的MyValue的值时，x最终也会获得这个改变的值"12345“。
 
@@ -492,17 +492,17 @@ x is Vegetable :   True
 
 ![img](../../public/images/2020-09-11-stack-heap/20131127073852765)
 
-1.  调用Go()方法，栈分配一块内存空间给x。
+1. 调用Go()方法，栈分配一块内存空间给x。
 
-2.  堆分配一块内存空间给Animal。
+2. 堆分配一块内存空间给Animal。
 
-3.  开始执行Switcharoo()方法，栈分配一块内存空间给pValue并指向x。
+3. 开始执行Switcharoo()方法，栈分配一块内存空间给pValue并指向x。
 
-4.  ![img](../../public/images/2020-09-11-stack-heap/20131127074345953)
+4. ![img](../../public/images/2020-09-11-stack-heap/20131127074345953)
 
-5.  栈分配一块内存空间给Vegetable。
+5. 栈分配一块内存空间给Vegetable。
 
-6.  pValue改变了x的值使其指向Vegetable的内在地址。
+6. pValue改变了x的值使其指向Vegetable的内在地址。
 
 如果我们不是用ref传递的，打印结果正相反。
 
@@ -733,11 +733,11 @@ Ted : Dude!, I have a Red shoe on my right foot, and a Red on my left foot.
 
 这个根的构成如下：
 
--   全局/静态 指针。通过以静态变量的方式保持对象的引用，来确保对象不会被GC回收。
+- 全局/静态 指针。通过以静态变量的方式保持对象的引用，来确保对象不会被GC回收。
 
--   栈里的指针。为了程序的执行，我们不想扔掉那些程序线程始终需要的对象。
+- 栈里的指针。为了程序的执行，我们不想扔掉那些程序线程始终需要的对象。
 
--   CPU寄存器指针。托管堆里任何被CPU内存地址指向的对象都需要被保留。
+- CPU寄存器指针。托管堆里任何被CPU内存地址指向的对象都需要被保留。
 
 ![在这里插入图片描述](../../public/images/2020-09-11-stack-heap/20190919173037464.png)
 在上面的图中，托管堆中的对象1，5被根Roots引用，3被1引用。对象1，5是被直接引用，3是通过递归查询找到。如果关联到我们之前的假设，对象1是我们的电视，对象3则是电视遥控器。当所有对象画完后，我们开始进行下一阶段：垃圾清理。
@@ -788,12 +788,12 @@ Ted : Dude!, I have a Red shoe on my right foot, and a Red on my left foot.
 
 # 参考
 
--   [C# Heap(ing) Vs Stack(ing) In .NET - Part One (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-i/)
+- [C# Heap(ing) Vs Stack(ing) In .NET - Part One (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-i/)
 
--   [C# Heap(ing) Vs Stack(ing) In .NET - Part Two (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-ii/)
+- [C# Heap(ing) Vs Stack(ing) In .NET - Part Two (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-ii/)
 
--   [C# Heap(ing) Vs Stack(ing) In .NET - Part Three (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-iii/)
+- [C# Heap(ing) Vs Stack(ing) In .NET - Part Three (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-iii/)
 
--   [C# Heap(ing) Vs Stack(ing) In .NET - Part Four (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-iv/)
+- [C# Heap(ing) Vs Stack(ing) In .NET - Part Four (c-sharpcorner.com)](https://www.c-sharpcorner.com/article/C-Sharp-heaping-vs-stacking-in-net-part-iv/)
 
--   [Unite Now - （中文字幕）性能优化技巧（上）\_哔哩哔哩 (゜-゜)つロ 干杯\~-bilibili](https://www.bilibili.com/video/BV1Tt4y1X7f6)
+- [Unite Now - （中文字幕）性能优化技巧（上）\_哔哩哔哩 (゜-゜)つロ 干杯\~-bilibili](https://www.bilibili.com/video/BV1Tt4y1X7f6)

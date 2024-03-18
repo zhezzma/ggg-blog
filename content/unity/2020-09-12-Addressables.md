@@ -20,11 +20,11 @@ Addressables.AddResourceLocator(locator);
 
 比如: 有个资源是ui.prefab,同时又lable`enter`,`main`可能就会有三个IResourceLocation
 
--   enter为key的IResourceLocation
+- enter为key的IResourceLocation
 
--   main为key的IResourceLocation
+- main为key的IResourceLocation
 
--   `Assets/prefabs/ui/ui.prefab`为key的IResourceLocation
+- `Assets/prefabs/ui/ui.prefab`为key的IResourceLocation
 
 ## IResourceLocation
 

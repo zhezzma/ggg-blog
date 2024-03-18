@@ -909,7 +909,6 @@ public class XRect{
 
         return result;
     }
-
 ```
 
 ```

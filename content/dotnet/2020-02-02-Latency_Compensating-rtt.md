@@ -16,11 +16,11 @@ title:  "延迟补偿和对时的相关总结"
 
 ![img](../../public/images/2020-02-02-Latency_Compensating-rtt/iyeruicpsm.png)
 
-1.  client 带上本地时间 t0 向 server 发送对时请求.
+1. client 带上本地时间 t0 向 server 发送对时请求.
 
-2.  server 回复当前自己的系统时间 t1.
+2. server 回复当前自己的系统时间 t1.
 
-3.  client ack 收到 server 回复时的本地时间 t2.
+3. client ack 收到 server 回复时的本地时间 t2.
 
 如果只有 client 关心对时结果, 这时可以优化到**只做1,2步甚至只做第2步**, 相当于 client 主动发起 ping;
 
@@ -80,9 +80,9 @@ o =(st0+st2-2ct1)/2
 
 #### 检查安全性
 
-1.  第一次连接的对时..时差不该查过三分钟.
+1. 第一次连接的对时..时差不该查过三分钟.
 
-2.  校验包客户端有没有修改时间,能够求得发包的时间,对比服务器接收到包的时间以及延迟
+2. 校验包客户端有没有修改时间,能够求得发包的时间,对比服务器接收到包的时间以及延迟
 
 ## 移动的延迟补偿.
 
@@ -102,7 +102,6 @@ var startMoveTime =   move.clientTime+o;
 var delay = DateTimeOffset.Now()-startMoveTime;//延迟时间
 
 //todo:将延迟时间参与到pos的计算当中
-
 
 ```
 
@@ -136,4 +135,4 @@ var delay = DateTimeOffset.Now()-startMoveTime;//延迟时间
 
 ## 一些模拟恶劣网络环境工具
 
--   <http://jagt.github.io/clumsy/cn/index.html>
+- <http://jagt.github.io/clumsy/cn/index.html>

@@ -50,4 +50,4 @@ title:  "快节奏多人游戏同步(1)-ClientServer架构"
 
 在下面的文章，我们会介绍我们怎么围绕权威服务器来建立一个系统，能够最小的减少玩家的延迟体验，就像在玩单机游戏一样顺畅。
 
--   <http://www.gabrielgambetta.com/client-server-game-architecture.html>
+- <http://www.gabrielgambetta.com/client-server-game-architecture.html>

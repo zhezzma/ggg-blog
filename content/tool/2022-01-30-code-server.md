@@ -4,9 +4,9 @@ title : "code server安装制作online ide"
 
 ## **官方文档**
 
--   [code-server v4.0.2 docs (](https://coder.com/docs/code-server/latest)[coder.com](http://coder.com)[)](https://coder.com/docs/code-server/latest)
+- [code-server v4.0.2 docs (](https://coder.com/docs/code-server/latest)[coder.com](http://coder.com)[)](https://coder.com/docs/code-server/latest)
 
--   [coder/code-server: VS Code in the browser (](https://github.com/coder/code-server)[github.com](http://github.com)[)](https://github.com/coder/code-server)
+- [coder/code-server: VS Code in the browser (](https://github.com/coder/code-server)[github.com](http://github.com)[)](https://github.com/coder/code-server)
 
 ## **原理基础**
 

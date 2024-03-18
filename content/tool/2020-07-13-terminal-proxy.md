@@ -8,7 +8,6 @@ title : "终端下设置代理"
 cmd命令行:(不用socks5)(临时设置)(也可放置环境变量)
 set http_proxy=http://127.0.0.1:1080
 set https_proxy=http://127.0.0.1:1080
-
 ```
 
 # powershell

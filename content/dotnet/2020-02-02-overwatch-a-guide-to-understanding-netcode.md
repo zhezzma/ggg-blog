@@ -34,18 +34,18 @@ ClientDelay = (1/2 \* Latency) + InterpolationDelay
 
 延迟补偿的实际操作步骤：
 
-1.  Player A看到Player B向一个角落跑去
+1. Player A看到Player B向一个角落跑去
 
-2.  Player A开枪，其客户端把这个操作发送给服务器
+2. Player A开枪，其客户端把这个操作发送给服务器
 
-3.  假定A的延迟的一半是Xms，那么Xms后服务器将收到Player A的操作
+3. 假定A的延迟的一半是Xms，那么Xms后服务器将收到Player A的操作
 
-4.  服务器从记录的历史信息中找到A开枪时B所在的位置。一般情况下，服务器应该往回看 (Xms + Player A's interpolation delay) 来回滚到A开枪时的游戏状态。但是这个时间是可以调的，取决于开发者希望延迟补偿算法如何工作。
+4. 服务器从记录的历史信息中找到A开枪时B所在的位置。一般情况下，服务器应该往回看 (Xms + Player A's interpolation delay) 来回滚到A开枪时的游戏状态。但是这个时间是可以调的，取决于开发者希望延迟补偿算法如何工作。
 
-5.  服务器判定这次的开枪是否命中。如果子弹的轨迹和目标模型的hit box相交，就认为是命中了。在这个例子中，我们假定命中了。在Player B看来，他觉得自己已经躲到墙后面了。但是Player B看到的游戏状态所处的时间和Server认定的开枪时间是有差异的，可以表示为：
-    (1/2 \* PlayerALatency + 1/2 \* PlayerBLatency + TimeSinceLastTick)
+5. 服务器判定这次的开枪是否命中。如果子弹的轨迹和目标模型的hit box相交，就认为是命中了。在这个例子中，我们假定命中了。在Player B看来，他觉得自己已经躲到墙后面了。但是Player B看到的游戏状态所处的时间和Server认定的开枪时间是有差异的，可以表示为：
+   (1/2 \* PlayerALatency + 1/2 \* PlayerBLatency + TimeSinceLastTick)
 
-6.  在下一次tick中，服务器使用计算结果更新所有客户端：Player A看到自己命中了目标，Player B看到自己掉血或挂掉了。
+6. 在下一次tick中，服务器使用计算结果更新所有客户端：Player A看到自己命中了目标，Player B看到自己掉血或挂掉了。
 
 需要注意的是，如果两个玩家对射，而且都命中了，游戏如何处理就取决于实现了。比如说在CS中，如果先收到的射击操作命中了目标玩家，那么后续收到的那个玩家的射击就会被丢弃。这样就避免了两个玩家的射击请求在同一帧，然后都命中，都挂掉。在Overwatch中，这种情况是可能的。这里是有取舍的。
 
@@ -81,26 +81,26 @@ ClientDelay = (1/2 \* Latency) + InterpolationDelay
 
 暴雪表示会采用一些技术来改进延迟的情况：
 
--   把网络状况相近的玩家匹配到一起，这样相对公平
+- 把网络状况相近的玩家匹配到一起，这样相对公平
 
--   提供60帧tick的服务器，目前是20帧的服务器
+- 提供60帧tick的服务器，目前是20帧的服务器
 
--   网络稳定时候，直接使用客户端指令，而不是缓存48ms的
+- 网络稳定时候，直接使用客户端指令，而不是缓存48ms的
 
--   网络波动时候，回溯加一个上限，比如250ms，不再是无限回溯了
+- 网络波动时候，回溯加一个上限，比如250ms，不再是无限回溯了
 
--   [Overwatch - Gameplay Architecture and Netcode - GDCVault](https://www.gdcvault.com/play/1024001/-Overwatch-Gameplay-Architecture-and)
+- [Overwatch - Gameplay Architecture and Netcode - GDCVault](https://www.gdcvault.com/play/1024001/-Overwatch-Gameplay-Architecture-and)
 
--   [《守望先锋》架构设计与网络同步 - GAD](http://gad.qq.com/article/detail/28682)
+- [《守望先锋》架构设计与网络同步 - GAD](http://gad.qq.com/article/detail/28682)
 
--   [《守望先锋》中的网络脚本化的武器和技能系统 - GAD](http://gad.qq.com/article/detail/28219)
+- [《守望先锋》中的网络脚本化的武器和技能系统 - GAD](http://gad.qq.com/article/detail/28219)
 
--   [Networking Scripted Weapons and Abilities in Overwatch - GDC Vault](https://www.gdcvault.com/play/1024653/Networking-Scripted-Weapons-and-Abilities)
+- [Networking Scripted Weapons and Abilities in Overwatch - GDC Vault](https://www.gdcvault.com/play/1024653/Networking-Scripted-Weapons-and-Abilities)
 
--   [浅谈《守望先锋》中的 ECS 架构 - 云风的 BLOG](https://blog.codingnow.com/2017/06/overwatch_ecs.html)
+- [浅谈《守望先锋》中的 ECS 架构 - 云风的 BLOG](https://blog.codingnow.com/2017/06/overwatch_ecs.html)
 
--   [GDC 2017 技术选荐合辑 - 知乎专栏](https://zhuanlan.zhihu.com/p/25703934)
+- [GDC 2017 技术选荐合辑 - 知乎专栏](https://zhuanlan.zhihu.com/p/25703934)
 
--   [守望先锋等 FPS 游戏的网络同步 - 知乎专栏](https://zhuanlan.zhihu.com/p/28825322)
+- [守望先锋等 FPS 游戏的网络同步 - 知乎专栏](https://zhuanlan.zhihu.com/p/28825322)
 
--   [A guide to understanding netcode - GAMEREPLAYS.ORG](https://www.gamereplays.org/overwatch/portals.php?show=page\&name=overwatch-a-guide-to-understanding-netcode)
+- [A guide to understanding netcode - GAMEREPLAYS.ORG](https://www.gamereplays.org/overwatch/portals.php?show=page&name=overwatch-a-guide-to-understanding-netcode)

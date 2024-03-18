@@ -4,7 +4,7 @@ title : "Windows LTSC、LTSB、Server 安装 Windows Store 应用商店 "
 
 打开网址 <https://store.rg-adguard.net/>
 
-以 PackageFamilyName 方式搜索 Microsoft.WindowsStore\_8wekyb3d8bbwe
+以 PackageFamilyName 方式搜索 Microsoft.WindowsStore_8wekyb3d8bbwe
 
 根据系统选择对应的包，每一种都要下载
 

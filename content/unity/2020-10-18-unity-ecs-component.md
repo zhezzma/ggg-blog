@@ -2,15 +2,15 @@
 title : "unity ecs component"
 ---
 
--   General Purpose Component
+- General Purpose Component
 
--   Shared component data    不存储在chunk中,而是存储在sharedComponentManager,而chunk中存的是索引.. 若ForEach中包含了Share Component，那么必须调用WithoutBurst方法和使用Run来执行
+- Shared component data    不存储在chunk中,而是存储在sharedComponentManager,而chunk中存的是索引.. 若ForEach中包含了Share Component，那么必须调用WithoutBurst方法和使用Run来执行
 
--   Chunk component data    相当于单例...更改后,会更改所有相关实体
+- Chunk component data    相当于单例...更改后,会更改所有相关实体
 
--   System State Components  类似一个标记..但是实体销毁时,并不会回收entity,只有当所有satecomponent移除后
+- System State Components  类似一个标记..但是实体销毁时,并不会回收entity,只有当所有satecomponent移除后
 
--   Dynamic buffer components    可以理解为一个数组component
+- Dynamic buffer components    可以理解为一个数组component
 
 ## General Purpose Component（普通用途组件）
 
@@ -59,31 +59,31 @@ public struct RenderMesh : ISharedComponentData
 
 每个内存块（Chunk）会有一个存放 shared components 索引的数组。这句话包含了几个要点：
 
-1.  对于实体来说，有同样 `SharedComponentData` 的实体会被一起放到同样的内存块（Chunk）中。
+1. 对于实体来说，有同样 `SharedComponentData` 的实体会被一起放到同样的内存块（Chunk）中。
 
-2.  如果我们有两个存储在同样的内存块中的两个实体，它们有同样的 `SharedComponentData` 类型和值。我们修改其中一个实体的 `SharedComponentData` 的值，这样会导致这个实体会被移动到一个新的内存块中，因为一个内存块共享同一个数组的 `SharedComponentData` 索引。事实上，从一个实体中增加或者移除一个组件，或者改变 shared components 的值都会导致这种操作的发生。
+2. 如果我们有两个存储在同样的内存块中的两个实体，它们有同样的 `SharedComponentData` 类型和值。我们修改其中一个实体的 `SharedComponentData` 的值，这样会导致这个实体会被移动到一个新的内存块中，因为一个内存块共享同一个数组的 `SharedComponentData` 索引。事实上，从一个实体中增加或者移除一个组件，或者改变 shared components 的值都会导致这种操作的发生。
 
-3.  其索引存储在内存块而非实体中，因此 `SharedComponentData` 对实体来说是低开销的。
+3. 其索引存储在内存块而非实体中，因此 `SharedComponentData` 对实体来说是低开销的。
 
-4.  因为内存块只需要存其索引，`SharedComponentData` 的内存消耗几乎可以忽略不计。
+4. 因为内存块只需要存其索引，`SharedComponentData` 的内存消耗几乎可以忽略不计。
 
 因为上面的第二个要点，我们不能滥用 shared components。滥用 shared components 将让 Unity 不能利用好内存块（Chunk），因此我们要避免添加不必要的数据或修改数据到 shared components 中。我们可以通过 Entity Debugger 来监测内存块的利用。
 
 ![img](../../public/images/2020-10-18-unity-ecs-component/5d295b6d78b7f51832.png)
 
-拿上一段 RenderMesh 的例子来说，共享材质会更有效率，因为 shared components 有其自己的 `manager` 和哈希表。其中 `manager` 带有一个存储 shared components 数据的自由列表（[freelist](https://zh.wikipedia.org/wiki/自由表)），哈希表可以快速地找到相应的值。内存块里面存的是索引数组，需要找数据的时候就会从 Shared Component Manager 中找。
+拿上一段 RenderMesh 的例子来说，共享材质会更有效率，因为 shared components 有其自己的 `manager` 和哈希表。其中 `manager` 带有一个存储 shared components 数据的自由列表（[freelist](https://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E8%A1%A8)），哈希表可以快速地找到相应的值。内存块里面存的是索引数组，需要找数据的时候就会从 Shared Component Manager 中找。
 
 ### 其他要点
 
--   `EntityQuery` 可以迭代所有拥有相同 `SharedComponentData` 的实体
+- `EntityQuery` 可以迭代所有拥有相同 `SharedComponentData` 的实体
 
--   我们可以用 `EntityQuery.SetFilter()` 来迭代所有拥有某个特定 `SharedComponentData` 的实体。这种操作开销十分低，因为 `SetFilter` 内部筛选的只是 int 的索引。前面说了每个内存块都有一个`SharedComponentData` 索引数组，因此对于每个内存块来说，筛选（filtering）的消耗都是可以忽略不计的。
+- 我们可以用 `EntityQuery.SetFilter()` 来迭代所有拥有某个特定 `SharedComponentData` 的实体。这种操作开销十分低，因为 `SetFilter` 内部筛选的只是 int 的索引。前面说了每个内存块都有一个`SharedComponentData` 索引数组，因此对于每个内存块来说，筛选（filtering）的消耗都是可以忽略不计的。
 
--   怎么样获取 `SharedComponentData` 的值呢？`EntityManager.GetAllUniqueSharedComponentData<T>` 可以得到在存活的实体中（alive entities）的所有的泛型 T 类型的`SharedComponentData` 值，结果以参数中的列表返回，你也可以通过其重载的方法获得所有值的索引。其他获取值的方法可以参考 /Packages/com.unity.entities/Unity.Entities/EntityManagerAccessComponentData.cs。
+- 怎么样获取 `SharedComponentData` 的值呢？`EntityManager.GetAllUniqueSharedComponentData<T>` 可以得到在存活的实体中（alive entities）的所有的泛型 T 类型的`SharedComponentData` 值，结果以参数中的列表返回，你也可以通过其重载的方法获得所有值的索引。其他获取值的方法可以参考 /Packages/com.unity.entities/Unity.Entities/EntityManagerAccessComponentData.cs。
 
--   `SharedComponentData` 是自动引用计数的，例如在没有任何内存块拥有某个`SharedComponentData` 索引的时候，引用计数会置零，从而知道要删除`SharedComponentData` 的数据 。这一点就能看出其在 ECS 的世界中是非常独特的存在，想要深入了解可以看这篇文章[《Everything about ISharedComponentData》](https://gametorrahod.com/everything-about-isharedcomponentdata/)。
+- `SharedComponentData` 是自动引用计数的，例如在没有任何内存块拥有某个`SharedComponentData` 索引的时候，引用计数会置零，从而知道要删除`SharedComponentData` 的数据 。这一点就能看出其在 ECS 的世界中是非常独特的存在，想要深入了解可以看这篇文章[《Everything about ISharedComponentData》](https://gametorrahod.com/everything-about-isharedcomponentdata/)。
 
--   `SharedComponentData` 应该尽量不去更改，因为更改 `SharedComponentData` 会导致实体的组件数据需要复制到其他的内存块中。
+- `SharedComponentData` 应该尽量不去更改，因为更改 `SharedComponentData` 会导致实体的组件数据需要复制到其他的内存块中。
 
 你也可以读读这篇更深入的文章[《Everything about ISharedComponentData》](https://gametorrahod.com/everything-about-isharedcomponentdata/)。
 
@@ -91,7 +91,7 @@ public struct RenderMesh : ISharedComponentData
 
 `SystemStateComponentData` 允许你跟踪系统（System）的资源，并允许你合适地创建和删除某些资源，这些过程中不依赖独立的回调（individual callback）。
 
-> 假设有一个网络同步 System State，其监控一个 Component A 的同步，则我只需要定义一个 SystemStateComponent SA。当 Entity \[有 A，无 SA] 时，表示 A 刚添加，此时添加 SA。等到 Entity \[无 A，有 SA] 时,表示 A 被删除（尝试销毁Entity 时也会删除 A）。
+> 假设有一个网络同步 System State，其监控一个 Component A 的同步，则我只需要定义一个 SystemStateComponent SA。当 Entity \[有 A，无 SA\] 时，表示 A 刚添加，此时添加 SA。等到 Entity \[无 A，有 SA\] 时,表示 A 被删除（尝试销毁Entity 时也会删除 A）。
 > [《浅入浅出Unity ECS》](https://zhuanlan.zhihu.com/p/51289405) BenzzZX
 
 `SystemStateComponentData` 和 `SystemStateSharedComponentData` 这两个类型与 `ComponentData` 和 `SharedComponentData` 十分相似，不同的是前者两个类型都是系统级别的，不会在实体删除的时候被删除。
@@ -100,11 +100,11 @@ public struct RenderMesh : ISharedComponentData
 
 System state components 有这样特殊的行为，是因为：
 
--   系统可能需要保持一个基于 `ComponentData` 的内部状态。例如已经被分配的资源。
+- 系统可能需要保持一个基于 `ComponentData` 的内部状态。例如已经被分配的资源。
 
--   系统需要通过值来管理这些状态，也需要管理其他系统所造成的的状态改变。例如在组件中的值改变的时候，或者在相关组件被添加或者被删除的时候。
+- 系统需要通过值来管理这些状态，也需要管理其他系统所造成的的状态改变。例如在组件中的值改变的时候，或者在相关组件被添加或者被删除的时候。
 
--   “没有回调”是 ECS 设计规则的重要元素。
+- “没有回调”是 ECS 设计规则的重要元素。
 
 ### Concept（概念）
 
@@ -126,11 +126,11 @@ System state components 有这样特殊的行为，是因为：
 
 通常 `DestroyEntity` 这个方法可以用来：
 
-1.  找到所有由某个实体 ID 标记的所有组件
+1. 找到所有由某个实体 ID 标记的所有组件
 
-2.  删除那些组件
+2. 删除那些组件
 
-3.  回收实体 ID 以作重用
+3. 回收实体 ID 以作重用
 
 然而，`DestroyEntity` 无法删除 `SystemStateComponentData` 。
 
@@ -166,19 +166,19 @@ public struct MyBufferElement : IBufferElementData
 
 可能有点奇怪，我们要定义缓冲中元素的结构而不是 `Buffer` 缓冲本身，其实这样在 ECS 中有两个好处：
 
-1.  对于 `float3` 或者其他常见的值类型来说，这样能支持多种 `DynamicBuffer` 。我们可以重用已有的缓冲元素的结构，来定义其他的 `Buffers`。
+1. 对于 `float3` 或者其他常见的值类型来说，这样能支持多种 `DynamicBuffer` 。我们可以重用已有的缓冲元素的结构，来定义其他的 `Buffers`。
 
-2.  我们可以将 `Buffer` 的元素类型包含在 `EntityArchetypes` 中，这样它会表现得像拥有一个组件一样。例如用 `AddBuffer()` 方法，可以通过 `entityManager.AddBuffer<MyBufferElement>(entity);` 来添加缓冲。
+2. 我们可以将 `Buffer` 的元素类型包含在 `EntityArchetypes` 中，这样它会表现得像拥有一个组件一样。例如用 `AddBuffer()` 方法，可以通过 `entityManager.AddBuffer<MyBufferElement>(entity);` 来添加缓冲。
 
 ## 关于prefab到entity
 
--   `IDeclareReferencedPrefabs` ： 将prefab引用添加到Conversion World。在`IConvertGameObjectToEntity`中可以通过GameObjectConversionSystem根据prefab获取entity
+- `IDeclareReferencedPrefabs` ： 将prefab引用添加到Conversion World。在`IConvertGameObjectToEntity`中可以通过GameObjectConversionSystem根据prefab获取entity
 
 ```cpp
 public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs) => referencedPrefabs.Add(Prefab);
 ```
 
--   `IConvertGameObjectToEntity`：自动生成一个新的entity，然后自定义对entity的操作。
+- `IConvertGameObjectToEntity`：自动生成一个新的entity，然后自定义对entity的操作。
 
 ```cpp
 public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
@@ -191,4 +191,4 @@ public void Convert(Entity entity, EntityManager dstManager, GameObjectConversio
     }
 ```
 
--   [Knightmore/MultiWorldBootstrap: Unity ICustomBootstrap extension for multiple custom world creation in ECS (github.com)](https://github.com/Knightmore/MultiWorldBootstrap)
+- [Knightmore/MultiWorldBootstrap: Unity ICustomBootstrap extension for multiple custom world creation in ECS (github.com)](https://github.com/Knightmore/MultiWorldBootstrap)

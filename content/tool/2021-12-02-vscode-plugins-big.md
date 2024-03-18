@@ -191,7 +191,7 @@ webpack.config.js</code>
 <code class="language-text">!node_modules/prettier</code>
 ```
 
-配置完成后，再进行打包，最后打包的插件体积为 **3.6M**，在 VS Code 中启动速度降到了 **1s** ，效果图如下：
+配置完成后，再进行打包，最后打包的插件体积为 **3\.6M**，在 VS Code 中启动速度降到了 **1s** ，效果图如下：
 
 ![](../../public/images/2021-12-02-vscode-plugins-big/2021-11-30-07-00-08v2-7fa4f670dae3d7e42f8b8e62e041289d_b.jpg)
 

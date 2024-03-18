@@ -39,8 +39,6 @@ jobs:
 
 执行 `git push` 操作，此时可以在 `github` 的 `Actions` 标签页看到执行结果
 
-
-
 # 安全相关
 
 如何在 `github action` 上访问敏感数据？如使用 `ssh` 登录时如何维护密码。
@@ -61,13 +59,14 @@ jobs:
 这里的 `secret` 就是一种 `context`，描述 CI/CD 一个 `workflow` 中的上下文信息，使用 `${{ expression }}` 语法表示。除了 `secret`，还有
 
 - `github`: `workflow` 的信息，如 `github.sha` 可以获取当前的 `commit SHA`，我们可以利用它为 `sentry` 或者 `docker image` 打入版本号
+
 - `env`: 环境变量
+
 - `job`: 当前执行 `job` 的信息，如 `job.status` 表示当前 `job` 的执行状态
+
 - `matrix`: 描述一些构建信息，如 `node` 以及 `os` 版本号
 
-更多 `context` 信息可以参考官方文档 **Contexts and expression syntax for GitHub Actions[4]**
-
-
+更多 `context` 信息可以参考官方文档 **Contexts and expression syntax for GitHub Actions\[4\]**
 
 # 自动创建项目Release
 
@@ -78,10 +77,11 @@ jobs:
 
 我就在想如果能用`Github Actions`来创建`Release`,并且做对应的编译和上传，那上面的问题都可以迎刃而解了，于是在官方市场搜索了一下`Release`关键字，果然已经有提供对应的`actions`了：
 
-*   [create\-release](https://github.com/actions/create-release): 用于创建 release
-*   [upload\-release\-asset](https://github.com/actions/upload-release-asset): 用于上传资源到对应的 release 中
+* [create-release](https://github.com/actions/create-release): 用于创建 release
 
-接着创建一个`Github仓库`，我测试的仓库地址是[https://github.com/monkeyWie/github\-actions\-demo](https://github.com/monkeyWie/github-actions-demo)，项目用 go 语言写的，代码非常简单就是两个 hello world 级别的代码，里面包含了普通的 go 程序和 cgo 程序。
+* [upload-release-asset](https://github.com/actions/upload-release-asset): 用于上传资源到对应的 release 中
+
+接着创建一个`Github仓库`，我测试的仓库地址是<https://github.com/monkeyWie/github-actions-demo>，项目用 go 语言写的，代码非常简单就是两个 hello world 级别的代码，里面包含了普通的 go 程序和 cgo 程序。
 
 项目的构建流程是在项目`git push --tags`的时候，触发 workflow，通过`Github Actions`编译出来`Windows、Linux、macOS`三个操作系统对应的 64 位可执行文件，再根据`tag name`和`tag message`来创建对应的`Github Release`，并将编译好的文件上传。
 
@@ -194,13 +194,19 @@ jobs:
 
 构建流程如下：
 
-1.  监听 tag name 为`v`开头的 push
-2.  运行一个 job，在`ubuntu`虚拟机环境下
-3.  拉取源码，安装`golang 1.13.x`环境
-4.  使用`go build`交叉编译出不同操作系统下 64 位可执行文件，并使用 zip 压缩
-5.  使用`xgo`交叉编译出不同操作系统下 64 位可执行文件，并使用 zip 压缩
-6.  使用`monkeyWie/create-release@master`创建 Release，其中会用到`${{ secrets.GITHUB_TOKEN }}`，这是`Github Actions`内置的一个[秘钥](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#github_token-secret)，用于授权访问你自己的 github 存储库，原理就是使用这个`TOKEN`调用`Github API`来进行创建 release，还有一个`${{ github.ref }}`也是`Github Actions`内置的一个[变量](https://help.github.com/en/github/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)，然后通过 action 的`with`进行参数传递。
-7.  使用`actions/upload-release-asset@v1.0.1`上传文件，这里使用了两个表达式`${{ steps.create_release.outputs.upload_url }}`和`${{ steps.create_release.outputs.tag }}`，可以获取到指定`action`的输出，第一个是获取创建好的 release 对应的上传地址，第二个是获取对应的 tag(例如：v1.0.0)，这样就可以在把上传的文件带上版本号。因为这个`action`不支持多个文件上传，所以就写了多个 action 进行上传。
+1. 监听 tag name 为`v`开头的 push
+
+2. 运行一个 job，在`ubuntu`虚拟机环境下
+
+3. 拉取源码，安装`golang 1.13.x`环境
+
+4. 使用`go build`交叉编译出不同操作系统下 64 位可执行文件，并使用 zip 压缩
+
+5. 使用`xgo`交叉编译出不同操作系统下 64 位可执行文件，并使用 zip 压缩
+
+6. 使用`monkeyWie/create-release@master`创建 Release，其中会用到`${{ secrets.GITHUB_TOKEN }}`，这是`Github Actions`内置的一个[秘钥](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#github_token-secret)，用于授权访问你自己的 github 存储库，原理就是使用这个`TOKEN`调用`Github API`来进行创建 release，还有一个`${{ github.ref }}`也是`Github Actions`内置的一个[变量](https://help.github.com/en/github/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)，然后通过 action 的`with`进行参数传递。
+
+7. 使用`actions/upload-release-asset@v1.0.1`上传文件，这里使用了两个表达式`${{ steps.create_release.outputs.upload_url }}`和`${{ steps.create_release.outputs.tag }}`，可以获取到指定`action`的输出，第一个是获取创建好的 release 对应的上传地址，第二个是获取对应的 tag(例如：v1.0.0)，这样就可以在把上传的文件带上版本号。因为这个`action`不支持多个文件上传，所以就写了多个 action 进行上传。
 
 # ssh命令
 
@@ -226,7 +232,6 @@ jobs:
     name: ...
     runs-on: ...
     ...
-
 ```
 
 # dotFx
@@ -286,8 +291,6 @@ jobs:
           }
         working-directory: ./docs
 ```
-
-
 
 # Hexo
 
@@ -418,10 +421,6 @@ jobs:
         git commit -m "Auto Delopy at `date +"%Y-%m-%d %H:%M"`"
         git push origin gh-pages
 ```
-
-
-
-
 
 # 市场
 

@@ -38,9 +38,9 @@ rm -rf /usr/local/src/igiven
 
 ## 注意点
 
--   仓库的名称不要例如igiven.github.io.不然部署时拉取仓库会失败
+- 仓库的名称不要例如igiven.github.io.不然部署时拉取仓库会失败
 
--   添加主机时必须使用python2.7
+- 添加主机时必须使用python2.7
 
 ```
 yum install -y nginx python2
@@ -52,5 +52,4 @@ ln -s /usr/bin/python2.7 /usr/bin/python
 
 systemctl enable nginx
 systemctl start nginx
-
 ```

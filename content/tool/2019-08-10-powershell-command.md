@@ -4,32 +4,34 @@ title:  "powershell 常用命令"
 
 ### 常用命令
 
--   Get-PSDrive  Windows PowerShell 驱动器是一个数据存储位置，你可以像访问 Windows PowerShell 中的文件系统驱动器那样访问它。
+- Get-PSDrive  Windows PowerShell 驱动器是一个数据存储位置，你可以像访问 Windows PowerShell 中的文件系统驱动器那样访问它。
 
--   Get-Alias 和   ls Alias:(驱动器)     列出所有alias
+- Get-Alias 和   ls Alias:(驱动器)     列出所有alias
 
--   ls Env:(驱动器)    列出所有的环境变量
+- ls Env:(驱动器)    列出所有的环境变量
 
--   ls Variable:(驱动器) 和 Get-Variable 列出所有的变量
+- ls Variable:(驱动器) 和 Get-Variable 列出所有的变量
 
--   ls Function:(驱动器)  列出所有的函数
+- ls Function:(驱动器)  列出所有的函数
 
--   get-command   查看命令信息 可以查看某个命令的path  get-command mysqldump
+- get-command   查看命令信息 可以查看某个命令的path  get-command mysqldump
 
--   invoke-item  向windows桌面双击操作一样打开某个文件或者目录
+- invoke-item  向windows桌面双击操作一样打开某个文件或者目录
 
--   \$env -split ";"  以列表形式列出所有path
+- $env -split ";"  以列表形式列出所有path
 
--   ls env:    列出env驱动器中的内容
+- ls env:    列出env驱动器中的内容
 
--
+- 
 
-    ```powershell
-     $path = [environment]::GetEnvironmentvariable("path","user")
-     [environment]::SetEnvironmentvariable("Path", $path+";c:\powershellscript", "User")
-    ```
+```
+```powershell
+ $path = [environment]::GetEnvironmentvariable("path","user")
+ [environment]::SetEnvironmentvariable("Path", $path+";c:\powershellscript", "User")
+```
+```
 
-# Running PowerShell Scripts From C\#
+# Running PowerShell Scripts From C#
 
 使用`-Command`参数，传递简单的字符串。 可以使用`-File`参数,传递一个ps脚本。 如果需要传递复杂（或者可能是换行符）的脚本文本，可以使用`-EncodedCommand`参数，它接受Base64编码的内容。
 

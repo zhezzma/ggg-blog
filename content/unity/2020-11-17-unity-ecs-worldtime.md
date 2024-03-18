@@ -80,7 +80,6 @@ World.cs
             queue.RemoveAt(queue.Length - 1);
             SetTime(prevTime.Time);
         }
-
 ```
 
 .
@@ -98,5 +97,4 @@ ComponentSystemBase
         /// The current Time data for this system's world.
         /// </summary>
         public ref readonly TimeData Time => ref World.Time;
-
 ```

@@ -2,7 +2,7 @@
 title : "Unity RenderTexture的应用"
 ---
 
-#### 1. UGUI上显示模型
+#### 1\. UGUI上显示模型
 
 ![img](../../public/images/2021-04-11-render-texture/4276633-05b67353425f7248.png)
 
@@ -45,7 +45,7 @@ public void CreateCamera(Vector3 pos, Vector3 rot, int width, int height, string
 }
 ```
 
-#### 2. Camera相机拍照分享，保存为jpg
+#### 2\. Camera相机拍照分享，保存为jpg
 
 ```csharp
 private IEnumerator CameraPhoto(Camera cam, Rect rect, string name) {
@@ -80,7 +80,7 @@ private IEnumerator CameraPhoto(Camera cam, Rect rect, string name) {
 
 4. 
 
-#### 3. 制作小地图
+#### 3\. 制作小地图
 
 ![img](../../public/images/2021-04-11-render-texture/17266280-153a6a121210c7f7.png)
 

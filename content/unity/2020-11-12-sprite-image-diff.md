@@ -14,7 +14,7 @@ coffeecato写在前面：
 
 Sprites本质上是半透明texture，其中texture是在导入时被设置导入为sprites的。它们不是直接被应用于meshes,而是会应用于长方形/多边形（最后，它们始终是meshes，因为没有那么大的区别）。Sprites就是被渲染到2d/3d场景或者其他界面中的图片.
 
-**1.用法**
+**1\.用法**
 在Unity中使用sprites很简单。只需将目标图片移动到assets文件夹下然后点击打开inspector settings.将texture type改为sprite(2D and UI),如下图：
 ![这里写图片描述](../../public/images/2020-11-12-sprite-image-diff/20171114233841299)
 现在你该决定将图片当成sprite使用还是作为UI Image.但是如果考虑到渲染，你可能并不确定你想要使用哪种方式。我们将会在下一节描述两种方式间的区别；现在我们大概描述一下如何在Unity中创建它们。
@@ -24,7 +24,7 @@ Sprites本质上是半透明texture，其中texture是在导入时被设置导�
 如果你想创建UI Image,在Hierarchy中右键然后create new UI–>Image.这个控件需要canvas,如果没有canvas会自动创建一个。最后，你将看到：
 ![这里写图片描述](../../public/images/2020-11-12-sprite-image-diff/20171114233911906)
 
-**2.对比：SpriteRenderer vs CanvasRenderer**
+**2\.对比：SpriteRenderer vs CanvasRenderer**
 
 在Hierarchy窗口,你可以把sprites随便放在哪。然而，UI Images不得不放在canvas下面。你可以通过transform移动其他obejcts那样移动sprites,但是images使用RectTransform来在界面系统中移动。
 
@@ -45,7 +45,7 @@ sprites和images的一个最重要的区别在于sprites支持网格的自动构
 
 上图中我们看到的情况很有意思，SpriteRenderer创造了两个子网格，一个对应一个孤岛；然后UI Image只是通过扩展矩形来覆盖整个图片。
 
-**3.性能**
+**3\.性能**
 
 你可能会猜到，上面例子显示的不同处理方式可能会导致性能的差异。当渲染很多对象时，差别会更明显（比如地形中的草，或者粒子特效）。下面我们来分析一下其中的原因。
 
@@ -75,7 +75,7 @@ sprites和images的一个最重要的区别在于sprites支持网格的自动构
 你可以通过Atlas Packer很方便的创建sprite atlas.同时，有时自动构造的网格性能上并不好你也无法控制它，因此你可能会使用一些性能更好的插件比如ShoeBox 或者 TexturePacker.
 ![这里写图片描述](../../public/images/2020-11-12-sprite-image-diff/20171114234059641)
 
-**4.结论**
+**4\.结论**
 
 当下次再遇到sprites时，不妨考虑下面的建议：
 

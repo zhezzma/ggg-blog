@@ -51,25 +51,25 @@ pip install shadowsocks
 
 配置说明：
 
-1.  server：Shadowsocks服务器地址
+1. server：Shadowsocks服务器地址
 
-2.  server\_port：Shadowsocks服务器端口
+2. server_port：Shadowsocks服务器端口
 
-3.  local\_address：本地IP，本地使用的 sock5 代理 ip
+3. local_address：本地IP，本地使用的 sock5 代理 ip
 
-4.  local\_port：本地端口，本地使用的 sock5 代理端口
+4. local_port：本地端口，本地使用的 sock5 代理端口
 
-5.  password：Shadowsocks连接密码
+5. password：Shadowsocks连接密码
 
-6.  timeout：等待超时时间
+6. timeout：等待超时时间
 
-7.  method：加密方式
+7. method：加密方式
 
-8.  workers:工作线程数
+8. workers:工作线程数
 
-9.  fast\_open：true或false。开启fast\_open以降低延迟，但要求Linux内核在3.7+。开启方法 echo 3 > /proc/sys/net/ipv4/tcp\_fastopen
+9. fast_open：true或false。开启fast_open以降低延迟，但要求Linux内核在3.7+。开启方法 echo 3 > /proc/sys/net/ipv4/tcp_fastopen
 
-上述配置需要根据情况进行修改，接下来需要启动服务，就可以通过 local\_address 和 local\_port 来使用 sock5 代理，流量就可以走 ss 了
+上述配置需要根据情况进行修改，接下来需要启动服务，就可以通过 local_address 和 local_port 来使用 sock5 代理，流量就可以走 ss 了
 
 配置启动脚本文件 /etc/systemd/system/shadowsocks.service
 
@@ -204,11 +204,11 @@ proxychains4 bash
 
 说明：
 
--   `method`为加密方法，可选`aes-128-cfb, aes-192-cfb, aes-256-cfb, bf-cfb, cast5-cfb, des-cfb, rc4-md5, chacha20, salsa20, rc4, table`
+- `method`为加密方法，可选`aes-128-cfb, aes-192-cfb, aes-256-cfb, bf-cfb, cast5-cfb, des-cfb, rc4-md5, chacha20, salsa20, rc4, table`
 
--   `server_port`为服务监听端口
+- `server_port`为服务监听端口
 
--   `password`为密码，可使用[密码生成工具](http://ucdok.com/project/generate_password.html)生成一个随机密码
+- `password`为密码，可使用[密码生成工具](http://ucdok.com/project/generate_password.html)生成一个随机密码
 
 以上三项信息在配置 shadowsocks 客户端时需要配置一致，具体说明可查看 shadowsocks 的帮助文档。
 

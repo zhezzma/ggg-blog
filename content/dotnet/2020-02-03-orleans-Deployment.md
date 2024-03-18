@@ -40,9 +40,9 @@ title:  "orleans的部署模式"
 
 # orleans支持 *蓝绿部署模型*以及*滚动部署模型*
 
--   ClusterId：这是Orleans集群的唯一ID。使用此ID的所有客户端和Silo将能够直接相互通信。但是，您可以选择ClusterId对不同的部署使用不同的名称。
+- ClusterId：这是Orleans集群的唯一ID。使用此ID的所有客户端和Silo将能够直接相互通信。但是，您可以选择ClusterId对不同的部署使用不同的名称。
 
--   ServiceId：这是您的应用程序的唯一ID，将由某些提供程序（例如持久性提供程序）使用。此ID应该保持稳定，并且在整个部署中都不应更改。
+- ServiceId：这是您的应用程序的唯一ID，将由某些提供程序（例如持久性提供程序）使用。此ID应该保持稳定，并且在整个部署中都不应更改。
 
 Orleans has both `ClusterId` & `ServiceId` to support the *blue/green deployment model*.
 
@@ -56,8 +56,8 @@ If you do not use blue/green deployments then you can set `ClusterId` & `Service
 
 To say this in a different way:
 
--   `ClusterId` + `ServiceId` are used for cluster membership
+- `ClusterId` + `ServiceId` are used for cluster membership
 
--   `ServiceId` is used for storage
+- `ServiceId` is used for storage
 
 <https://github.com/dotnet/orleans/issues/5696#issuecomment-503595998>

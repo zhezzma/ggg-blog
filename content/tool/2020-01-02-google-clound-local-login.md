@@ -41,7 +41,7 @@ passwd   #修改密码
 
 修改root密码完成
 
-### 接着修改SSH配置文件/etc/ssh/sshd\_config
+### 接着修改SSH配置文件/etc/ssh/sshd_config
 
 ```
 vi /etc/ssh/sshd_config #编辑文件

@@ -112,11 +112,11 @@ title:  "ugui的eventsystem源码解读"
 
 核心方法为ExecuteEvents.Execute，如果需要触发事件就调用该方法吧！我们需要向其中传3个参数：
 
--   一个是传递的GameObject，也就是挂载事件的对象。
+- 一个是传递的GameObject，也就是挂载事件的对象。
 
--   第二个参数则是PointEventData，这个参数最终会传给事件处理函数，通常是UGUI自己对输入进行处理并且输出的。
+- 第二个参数则是PointEventData，这个参数最终会传给事件处理函数，通常是UGUI自己对输入进行处理并且输出的。
 
--   最后一个参数就是一个传入的delegate，用于接收各种EventData，最后经由一个验证函数来获得具体的EventData。
+- 最后一个参数就是一个传入的delegate，用于接收各种EventData，最后经由一个验证函数来获得具体的EventData。
 
 ![img](../../public/images/2019-08-12-ugui-eventsystem-sourcecode/v2-de00fc2cb10360aede52694d0cb5710c_hd.jpg)
 

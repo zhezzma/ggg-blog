@@ -2,7 +2,7 @@
 title : "A Native Collection has not been disposed, resulting in a memory leak. Allocated from:"
 ---
 
-![f:id:sugar\_affordance:20201110091446p](../../public/images/2020-12-20-Collection-has-not-been-disposed/20201110091446.png)
+![f:id:sugar_affordance:20201110091446p](../../public/images/2020-12-20-Collection-has-not-been-disposed/20201110091446.png)
 
 ```
 A Native Collection has not been disposed, resulting in a memory leak. Enable Full StackTraces to get more details.
@@ -12,7 +12,7 @@ A Native Collection has not been disposed, resulting in a memory leak. Enable Fu
 
 单击 Unity 菜单中的 Jobs > Leak Detection > Full Stack Traces 以选中它。还有记得重启unity
 
-![f:id:sugar\_affordance:20201110091520p](../../public/images/2020-12-20-Collection-has-not-been-disposed/20201110091520.png)
+![f:id:sugar_affordance:20201110091520p](../../public/images/2020-12-20-Collection-has-not-been-disposed/20201110091520.png)
 
 然后，控制台中的错误内容将显示内存[泄漏](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)发生在数据保留位置。
 
@@ -37,7 +37,7 @@ NativeArray<float> leakArray = new NativeArray<float>(4, Allocator.TempJob);
 **如果 Allocator.Temp**在函数中没有 Dispose， 否则内存[泄漏](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)，
 
 **确定 Allocator.TempJob**必须在
-4 帧内释放， 否则内存[泄漏确定](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)\_\_Allocator.Persistent 将永久保留，[并且不会](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)检测到内存泄漏。
+4 帧内释放， 否则内存[泄漏确定](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)\__Allocator.Persistent 将永久保留，[并且不会](http://d.hatena.ne.jp/keyword/%A5%E1%A5%E2%A5%EA%A5%EA%A1%BC%A5%AF)检测到内存泄漏。
 
 ### 用 using 括起来，确保内存安全
 
@@ -63,4 +63,4 @@ using (NativeArray<float> leakArray = new NativeArray<float>(4, Allocator.TempJo
 }
 ```
 
-[从 C#](http://d.hatena.ne.jp/keyword/C%23)8 开始，您可以在 Coco 中并排编写句点，但 Unity 现在[像 C#](http://d.hatena.ne.jp/keyword/C%23)7.3 一样，将来会起作用吗？
+[从 C#](http://d.hatena.ne.jp/keyword/C%23)8 开始，您可以在 Coco 中并排编写句点，但 Unity 现在[像 C#](http://d.hatena.ne.jp/keyword/C%23)7\.3 一样，将来会起作用吗？

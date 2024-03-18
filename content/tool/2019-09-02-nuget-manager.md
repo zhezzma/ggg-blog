@@ -22,6 +22,6 @@ title:  "使用配置文件来管理NuGet包版本F"
 
 ### 相关连接
 
--   [包的版本号](https://docs.microsoft.com/zh-cn/nuget/consume-packages/package-references-in-project-files)
+- [包的版本号](https://docs.microsoft.com/zh-cn/nuget/consume-packages/package-references-in-project-files)
 
--   [Directory.Build.props的说明](https://docs.microsoft.com/zh-cn/visualstudio/msbuild/customize-your-build?view=vs-2019)
+- [Directory.Build.props的说明](https://docs.microsoft.com/zh-cn/visualstudio/msbuild/customize-your-build?view=vs-2019)

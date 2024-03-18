@@ -62,9 +62,9 @@ c=’en-UK’|uic=’en-US’
 
 ## Cultures
 
--   `SupportedCultures` 的 [CultureInfo](https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo\(v=vs.110\).aspx) 对象决定了和文化相关的函数，如日期，时间，数字和货币格式的结果。同时决定了文字如何排序，大小写转换以及字符串比较。参考[CultureInfo.CurrentCulture](https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.currentculture\(v=vs.110\).aspx) 获取更多关于服务器如何获取文化的信息。
+- `SupportedCultures` 的 [CultureInfo](https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo(v=vs.110).aspx) 对象决定了和文化相关的函数，如日期，时间，数字和货币格式的结果。同时决定了文字如何排序，大小写转换以及字符串比较。参考[CultureInfo.CurrentCulture](https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.currentculture(v=vs.110).aspx) 获取更多关于服务器如何获取文化的信息。
 
--   `SupportedUICultures` 决定如何通过 [ResourceManager](https://msdn.microsoft.com/en-us/library/system.resources.resourcemanager\(v=vs.110\).aspx) 查找翻译字符串（从 *.resx* 文件）。 *ResourceManager* 只是通过 CurrentUICulture 简单的查找指定文化的字符串。
+- `SupportedUICultures` 决定如何通过 [ResourceManager](https://msdn.microsoft.com/en-us/library/system.resources.resourcemanager(v=vs.110).aspx) 查找翻译字符串（从 *.resx* 文件）。 *ResourceManager* 只是通过 CurrentUICulture 简单的查找指定文化的字符串。
 
 .NET 的每个线程都会拥有 `CurrentCulture` 和`CurrentUICulture` 对象。当 ASP.NET Core 在渲染与文化相关的函数的时候会检视这些对象值。例如，如果当前线程的区域性设置为 “en-US” （英语、美国）， `DateTime.Now.ToLongDateString() "Thursday, February 18, 2016"` ，但如果 CurrentCulture 设置为 “es-ES”（西班牙语、西班牙），输出将会是 “jueves, 18 de febrero de 2016”。
 
@@ -109,7 +109,6 @@ private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, I
     var (cultureName, uiCultureName) = LocalizationSettingHelper.ParseLanguageSetting(defaultLanguage);
     return new RequestCulture(cultureName, uiCultureName);
 }
-
 ```
 
 然后中间件是
@@ -124,9 +123,9 @@ app.UseAbpRequestLocalization();
 
 首先注意浏览器发送的中文的`accept-language`的值与ABP值是不一样的:
 
--   浏览器(如Chrome)的值为`zh-CN`
+- 浏览器(如Chrome)的值为`zh-CN`
 
--   而ABP的简体中文的值为`zh-Hans`
+- 而ABP的简体中文的值为`zh-Hans`
 
 首先修改配置文件appsettings.json
 

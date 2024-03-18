@@ -4,7 +4,7 @@ title : "protobuf序列化的一些问题"
 
 # Base / Derived Classes
 
-Each derived class must have its base class marked with \[ProtoInclude(, typeof(ProtoBuff-Derived-Class))]. If not, all values will be NULL.
+Each derived class must have its base class marked with \[ProtoInclude(, typeof(ProtoBuff-Derived-Class))\]. If not, all values will be NULL.
 
 ```
 [ProtoContract]
@@ -71,46 +71,46 @@ List<int> list2 = null;
 
 after deserialization, both the lists will have the same value—that is NULL. There are two ways to solve this:
 
-1.  Using a private field (we are using this):
+1. Using a private field (we are using this):
 
-    ```
-    [ProtoMember(12, OverwriteList = true)]
-    private List _publicFolders;
-    public List publicFolders
-    {
-      get
-      {
-        if (_publicFolders == null)
-        {
-          _publicFolders = new List();
-        }
-        return _publicFolders;
-      }
-      set
-      {
-        _publicFolders = value;
-      }
-    }
-    ```
+   ```
+   [ProtoMember(12, OverwriteList = true)]
+   private List _publicFolders;
+   public List publicFolders
+   {
+     get
+     {
+       if (_publicFolders == null)
+       {
+         _publicFolders = new List();
+       }
+       return _publicFolders;
+     }
+     set
+     {
+       _publicFolders = value;
+     }
+   }
+   ```
 
-2.  Using the OnDeserialized attribute:
+2. Using the OnDeserialized attribute:
 
-    ```
-    [ProtoMember(2, OverwriteList = true)]
-    private PublicFolder[] publicFolders;
-    [ProtoMember(3, OverwriteList = true)]
-    private PrivateFolder[] privateFolder;
-    [ProtoMember(4, OverwriteList = true)]
-    private SecureFolder[] secureFolder;
-
-    [OnDeserialized]
-    private void HandleSerializationMismatch(StreamingContext context)
-    {
-      publicFolders = publicFolders ?? new PublicFolders[0];
-      privateFolder = privateFolder ?? new PrivateFolder[0];
-      secureFolder = secureFolder ?? new SecureFolder[0];
-    }
-    ```
+   ```
+   [ProtoMember(2, OverwriteList = true)]
+   private PublicFolder[] publicFolders;
+   [ProtoMember(3, OverwriteList = true)]
+   private PrivateFolder[] privateFolder;
+   [ProtoMember(4, OverwriteList = true)]
+   private SecureFolder[] secureFolder;
+   
+   [OnDeserialized]
+   private void HandleSerializationMismatch(StreamingContext context)
+   {
+     publicFolders = publicFolders ?? new PublicFolders[0];
+     privateFolder = privateFolder ?? new PrivateFolder[0];
+     secureFolder = secureFolder ?? new SecureFolder[0];
+   }
+   ```
 
 # Things to Remember
 
@@ -326,9 +326,9 @@ public class CustomStringDictionary<TElement> : CustomCollectionBase<Dictionary<
 
 So basically there are two methods that are defined.
 
-1.  \_\_PreSerialize – Converts the collection in to a byte array which becomes the proto member.
+1. \__PreSerialize – Converts the collection in to a byte array which becomes the proto member.
 
-2.  \_\_PostDeserialize – Converts the byte array back to the collection.
+2. \__PostDeserialize – Converts the byte array back to the collection.
 
 We can completely avoid defining run time types for this generic type. Instead of protobuf-net being responsible of creating the type, we create the type by ourselves using the same protobuf Serializer.
 

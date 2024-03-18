@@ -3,6 +3,7 @@ export default defineAppConfig({
   description: "The minimalist blog theme",
   url: "",
   logo: "",
+  pageSize:15,
   authors: [
     {
       default: true,
@@ -31,7 +32,7 @@ export default defineAppConfig({
     enabled: true,
     form_action: "YOUR_NEWSLETTER_FORM_ACTION",
   },
-  
+
   ui: {
     primary: 'blue'
   },

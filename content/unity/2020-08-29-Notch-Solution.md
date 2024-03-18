@@ -34,9 +34,9 @@ Screen.safeArea会返回移动平台安全区的Rect。例如，iPhoneX（2436x1
 
 首先分为两个component.
 
--   [SafePadding](https://exceed7.com/notch-solution/components/ui-behaviour/safe-padding.html)Works with `RectTransform` tree of the uGUI component system.
+- [SafePadding](https://exceed7.com/notch-solution/components/ui-behaviour/safe-padding.html)Works with `RectTransform` tree of the uGUI component system.
 
--   [SafeAdaptation](https://exceed7.com/notch-solution/components/adaptation/safe-adaptation.html)They are based on using [Playables API](https://docs.unity3d.com/ScriptReference/Playables.Playable.html) to control `GameObject` with animation playables, therefore utilizing `Animator` and `AnimationClip` instead of `RectTransform`.
+- [SafeAdaptation](https://exceed7.com/notch-solution/components/adaptation/safe-adaptation.html)They are based on using [Playables API](https://docs.unity3d.com/ScriptReference/Playables.Playable.html) to control `GameObject` with animation playables, therefore utilizing `Animator` and `AnimationClip` instead of `RectTransform`.
 
 ## 原理
 
@@ -72,7 +72,6 @@ Screen.safeArea会返回移动平台安全区的Rect。例如，iPhoneX（2436x1
                 return cachedScreenSafeAreaRelative;
             }
         }
-
 ```
 
 ## safepadding

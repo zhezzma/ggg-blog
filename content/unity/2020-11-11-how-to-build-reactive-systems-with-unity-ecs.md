@@ -2,7 +2,7 @@
 title : "如何使用Unity ECS打造Reactive System？"
 ---
 
-### 1. 使用SystemStateComponent
+### 1\. 使用SystemStateComponent
 
 ### 原理
 
@@ -18,7 +18,7 @@ title : "如何使用Unity ECS打造Reactive System？"
 
 更具体的实现可以在查看官方对于ParentSystem的设计。
 
-### 2. 查询ComponentVersion
+### 2\. 查询ComponentVersion
 
 每当出现某Component相关的结构性变化的时候，该Component的版本就会+1 。
 
@@ -32,7 +32,7 @@ EntityManager.GetComponentVersion()
 
 顾名思义。方法有三种。
 
-### 1. Chunk检查
+### 1\. Chunk检查
 
 ### 原理
 
@@ -97,7 +97,7 @@ struct UpdateJob : IJobChunk
 }
 ```
 
-### 2. Query自动检查
+### 2\. Query自动检查
 
 在声明Query的时候，特别注明
 
@@ -118,7 +118,7 @@ protected override void OnCreate()
 }
 ```
 
-### 3. IJobForEach中使用 \[ChangeFilter\]
+### 3\. IJobForEach中使用 \[ChangeFilter\]
 
 与Query的排除效果类似。
 

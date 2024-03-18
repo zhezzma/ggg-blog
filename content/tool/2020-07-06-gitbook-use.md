@@ -34,9 +34,9 @@ npm install -g gitbook-cli
 
 执行完后，你会看到多了两个文件 —— README.md 和 SUMMARY.md，它们的作用如下：
 
--   README.md —— 书籍的介绍写在这个文件里
+- README.md —— 书籍的介绍写在这个文件里
 
--   SUMMARY.md —— 书籍的目录结构在这里配置
+- SUMMARY.md —— 书籍的目录结构在这里配置
 
 ### 使用Typora来编写框架内容
 
@@ -94,11 +94,11 @@ https://<username>.github.io/<repository>/
 
 GitHub Pages 的静态资源支持下面 3 个来源：
 
--   `master` 分支
+- `master` 分支
 
--   `master` 分支的 `/docs` 目录
+- `master` 分支的 `/docs` 目录
 
--   `gh-pages` 分支
+- `gh-pages` 分支
 
 ![img](../../public/images/2020-07-06-gitbook-use/1624919-00837dbbb587799c.jpg)
 

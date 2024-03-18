@@ -20,8 +20,8 @@ We are also working internally to leverage that diagnostic tools to detect probl
 
 Domain reload detailed timings can now be enabled in 2021.2.0a20 an 2021.1.11f1 (and we are busy backporting this to 2019.4 and 2020.3).
 \- In 2021.2.x it can be enabled using the diagnostics switches in Editor Preferences
-![upload\_2021-6-14\_12-14-44.png](../../public/images/2021-10-01-Increased-script-assembly-reload-time/upload_2021-6-14_12-14-44-png.871142)
-\- In 2021.1 (which does not have the diagnostic switches UI), you can enable it with the environment variable UNITY\_DIAG\_ENABLE\_DOMAIN\_RELOAD\_TIMINGS.
+![upload_2021-6-14_12-14-44.png](../../public/images/2021-10-01-Increased-script-assembly-reload-time/upload_2021-6-14_12-14-44-png.871142)
+\- In 2021.1 (which does not have the diagnostic switches UI), you can enable it with the environment variable UNITY_DIAG_ENABLE_DOMAIN_RELOAD_TIMINGS.
 (e.g. in a Powershell console, you can run
 
 ```

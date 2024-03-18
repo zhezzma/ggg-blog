@@ -6,9 +6,9 @@ title : "unity 移动平台打包丢失shader的问题"
 
 我找到了2个解决办法
 
-1.随意创建一个物体并添加使用了此shader的材质。并不推荐此方法，正确的方法应该是第二种。
+1\.随意创建一个物体并添加使用了此shader的材质。并不推荐此方法，正确的方法应该是第二种。
 
-2.在GraphicsSettings中添加上此shader：
+2\.在GraphicsSettings中添加上此shader：
 
 选择Edit->ProjectSettings->Graphics （不同的unity版本可能有所不同，我的版本是5.6）
 

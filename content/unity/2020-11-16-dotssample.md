@@ -145,12 +145,11 @@ typeof(PlayerCameraControl.State)
 );
 
 
-
 ```
 
 首先看`CharacterAuthoring`然后我们就知道.一个character到底有哪些东东了
 
-//Assets/Unity.Sample.Terraformer/Prefabs/Characters/Terraformer/Char\_Terraformer.prefab
+//Assets/Unity.Sample.Terraformer/Prefabs/Characters/Terraformer/Char_Terraformer.prefab
 
 SpawnCharacter
 

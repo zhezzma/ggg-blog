@@ -4,7 +4,6 @@ title:  "Unity 导出 Android 64-bit 版本"
 
 ## 导出说明
 
-
 Unity supports x64 since 2017 LTS. To enable it you can go to File > Build Settings > Player Settings.
 
 There under "Other Settings" you have to change your Script Backend to IL2CPP, and you will have the ARM64 checkbox active. Check it.

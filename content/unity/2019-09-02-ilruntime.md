@@ -20,57 +20,57 @@ C#代码在编写后，是需要执行编译的，才能起效，这样如果在
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180525160300209-2123986426.png)
 
-1.  AppDomain vs 进程
-    AppDomain被创建在进程中，一个进程内可以有多个AppDomain。一个AppDomain只能属于一个进程。
+1. AppDomain vs 进程
+   AppDomain被创建在进程中，一个进程内可以有多个AppDomain。一个AppDomain只能属于一个进程。
 
-2.  AppDomain vs 线程
-    其实两者本来没什么好对比的。AppDomain是个静态概念，只是限定了对象的边界；线程是个动态概念，它可以运行在不同的AppDomain。一个AppDomain内可以创建多个线程，但是不能限定这些线程只能在本AppDomain内执行代码。CLR中的System.Threading.Thread对象其实是个soft thread，它并不能被操作系统识别；操作系统能识别的是hard thread。一个soft thread只属于一个AppDomain，穿越AppDomain的是hard thread。当hard thread访问到某个AppDomain时,一个AppDomain就会为之产生一个soft thread。
-    hard thread有thread local storage(TLS)，这个存储区被CLR用来存储这个hard thread当前对应AppDomain引用以及softthread引用。当一个hard thread穿越到另外一个AppDomain时，TLS中的这些引用也会改变。
-    当然这个说法很可能是和CLR的实现相关的。
+2. AppDomain vs 线程
+   其实两者本来没什么好对比的。AppDomain是个静态概念，只是限定了对象的边界；线程是个动态概念，它可以运行在不同的AppDomain。一个AppDomain内可以创建多个线程，但是不能限定这些线程只能在本AppDomain内执行代码。CLR中的System.Threading.Thread对象其实是个soft thread，它并不能被操作系统识别；操作系统能识别的是hard thread。一个soft thread只属于一个AppDomain，穿越AppDomain的是hard thread。当hard thread访问到某个AppDomain时,一个AppDomain就会为之产生一个soft thread。
+   hard thread有thread local storage(TLS)，这个存储区被CLR用来存储这个hard thread当前对应AppDomain引用以及softthread引用。当一个hard thread穿越到另外一个AppDomain时，TLS中的这些引用也会改变。
+   当然这个说法很可能是和CLR的实现相关的。
 
-3.  AppDomain vs Assembly
-    Assembly是.Net程序的基本部署单元，它可以为CLR提供用于识别类型的元数据等等。Assembly不能单独执行，它必须被加载到AppDomain中，然后由AppDomain创建程序集中的对象。一个Assembly可以被多个AppDomain加载，一个AppDomain可以加载多个Assembly。每个AppDomain引用到某个类型的时候需要把相应的assembly在各自的AppDomain中初始化。因此，每个AppDomain会单独保持一个类的静态变量。
+3. AppDomain vs Assembly
+   Assembly是.Net程序的基本部署单元，它可以为CLR提供用于识别类型的元数据等等。Assembly不能单独执行，它必须被加载到AppDomain中，然后由AppDomain创建程序集中的对象。一个Assembly可以被多个AppDomain加载，一个AppDomain可以加载多个Assembly。每个AppDomain引用到某个类型的时候需要把相应的assembly在各自的AppDomain中初始化。因此，每个AppDomain会单独保持一个类的静态变量。
 
-4.  AppDomain vs 对象
-    任何对象只能属于一个AppDomain。AppDomain用来隔离对象，不同AppDomain之间的对象必须通过Proxy(reference type)或者Clone(value type)通信。引用类型需要继承System.MarshalByRefObject才能被Marshal/UnMarshal(Proxy)。值类型需要设置Serializable属性才能被Marshal/UnMarshal(Clone)。
+4. AppDomain vs 对象
+   任何对象只能属于一个AppDomain。AppDomain用来隔离对象，不同AppDomain之间的对象必须通过Proxy(reference type)或者Clone(value type)通信。引用类型需要继承System.MarshalByRefObject才能被Marshal/UnMarshal(Proxy)。值类型需要设置Serializable属性才能被Marshal/UnMarshal(Clone)。
 
-5.  AppDomain vs Assembly Code
-    AppDomain和程序集的源代码是什么关系呢？每个程序集的代码会分别装载到各个AppDomain中？
-    首先我们要把程序集分3类
-    1.mscorlib，这是每个.net程序都要引用到的程序集。
-    2.GAC，这个是强命名的公用程序集，可以被所有的.net程序引用。
-    3.Assembly not in GAC，这是普通的assembly，可以不是强命名，不放到GAC中。
-    启动CLR，进入entry point时可以设置LoaderOptimization属性：
+5. AppDomain vs Assembly Code
+   AppDomain和程序集的源代码是什么关系呢？每个程序集的代码会分别装载到各个AppDomain中？
+   首先我们要把程序集分3类
+   1\.mscorlib，这是每个.net程序都要引用到的程序集。
+   2\.GAC，这个是强命名的公用程序集，可以被所有的.net程序引用。
+   3\.Assembly not in GAC，这是普通的assembly，可以不是强命名，不放到GAC中。
+   启动CLR，进入entry point时可以设置LoaderOptimization属性：
 
-    ```
-    [LoaderOptimization(LoaderOptimization.MultiDomain]
-    static void Main()
-    {...}
-    ```
+   ```
+   [LoaderOptimization(LoaderOptimization.MultiDomain]
+   static void Main()
+   {...}
+   ```
 
-    ![img](../../public/images/2019-09-02-ilruntime/20160504151602702.png)
+   ![img](../../public/images/2019-09-02-ilruntime/20160504151602702.png)
 
-    LoaderOptimization属性可以设置三个不同的枚举值，来设置针对前面说的三种程序集的代码存放以及访问方式。
+   LoaderOptimization属性可以设置三个不同的枚举值，来设置针对前面说的三种程序集的代码存放以及访问方式。
 
-    -   SingleDomain，由于只启动一个AppDomain，那么code就被直接装载到了AppDomain中，访问静态变量更快捷。
+   - SingleDomain，由于只启动一个AppDomain，那么code就被直接装载到了AppDomain中，访问静态变量更快捷。
 
-    -   MultiDomain，所有的Assembly代码是进程级别的，因此所有的AppDomain只访问一份代码。这大大减少了程序占用的内存，但是由于程序集的静态变量仍然在各个AppDomain中，因此代码访问静态变量需要先得到AppDomain的引用再进行转换，速度会受到影响。
+   - MultiDomain，所有的Assembly代码是进程级别的，因此所有的AppDomain只访问一份代码。这大大减少了程序占用的内存，但是由于程序集的静态变量仍然在各个AppDomain中，因此代码访问静态变量需要先得到AppDomain的引用再进行转换，速度会受到影响。
 
-    -   MultiDomainHost，只有GAC代码是共享的，非GAC的Assembly依然会加载到被使用的AppDomain中，这样提高了静态变量的访问速度，当然也增加了程序占用的内存。
+   - MultiDomainHost，只有GAC代码是共享的，非GAC的Assembly依然会加载到被使用的AppDomain中，这样提高了静态变量的访问速度，当然也增加了程序占用的内存。
 
-        不管是哪种方式，mscorlib始终是process级别的，即只有一份mscorlib代码在内存中。
+     不管是哪种方式，mscorlib始终是process级别的，即只有一份mscorlib代码在内存中。
 
 # 使用dll进行热更
 
 文章并不是完全的实现热更新,实现的是windows和android平台下，对于dll文件的热更新。对于IOS为什么不能热更新，我们后续会讨论到，先看看安卓和windows下 dll的热更新步骤。
 
--   新建一个ClassLibrary（类库）的工程，在其中实现对应的类和方法；
+- 新建一个ClassLibrary（类库）的工程，在其中实现对应的类和方法；
 
--   将该工程导出为DLL；
+- 将该工程导出为DLL；
 
--   将DLL改为bytes文件，存入Unity工程中的StreamingAssets文件夹下；
+- 将DLL改为bytes文件，存入Unity工程中的StreamingAssets文件夹下；
 
--   在工程运行的时候，读取StreamingAssets下的Dll文件，用Assembly.Load(byte\[] bytes )的方法，将DLL文件读取出来，进而执行相关的操作。这一步的代码为：
+- 在工程运行的时候，读取StreamingAssets下的Dll文件，用Assembly.Load(byte\[\] bytes )的方法，将DLL文件读取出来，进而执行相关的操作。这一步的代码为：
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180525160707418-392942905.png)
 
@@ -144,7 +144,7 @@ ReadImageFrom的操作：
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180525184110212-726126206.png)
 
-1.  ReadMetadata
+1. ReadMetadata
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180525184136211-1306602825.png)
 
@@ -234,7 +234,7 @@ var mtypes = metadata.Types
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180528144626456-2070945940.png)
 
-构建一个内部定义的类，然后做数据填充，看看关键的几个属性的设置：BaseType ,设置其父类型，fields*range/methods\_range* 是对属性范围和方法范围的设置：
+构建一个内部定义的类，然后做数据填充，看看关键的几个属性的设置：BaseType ,设置其父类型，fields*range/methods_range* 是对属性范围和方法范围的设置：
 
 ![img](../../public/images/2019-09-02-ilruntime/656520-20180528144639749-1842647497.png)
 
@@ -323,7 +323,7 @@ var obj = ctor.Invoke(null);
 >
 > 一个可加载并浏览现有程序集并进行动态修改并保存的.NET框架。可以静态注入程序集（注入后生成新的程序集）和动态注入程序集（注入后不改变目标程序集，只在运行时改变程序集行为。可以通过其实现AOP等高级功能
 
-Unity的代码在修改之后会自动编译到Library\ScriptAssemblies下的两个Assembly中，所以我会尝试着将代码注入到其中。
+Unity的代码在修改之后会自动编译到Library\\ScriptAssemblies下的两个Assembly中，所以我会尝试着将代码注入到其中。
 
 ```
 public class Test : MonoBehaviour{
@@ -425,7 +425,6 @@ private static void ComputeOffsets(MethodBody body)
       offset += instruction.GetSize();
    }
 }
-
 ```
 
 等待编译完成，并且运行程序，我们发现在输出原来的语句之前多了一句“Inject”
@@ -433,30 +432,30 @@ private static void ComputeOffsets(MethodBody body)
 
 # 注意
 
--   ILRuntime并没有创建一个Appdomain,只是取其名字意思.始终工作在默认的AppDomain
+- ILRuntime并没有创建一个Appdomain,只是取其名字意思.始终工作在默认的AppDomain
 
--   ILRuntime中使用Unity项目的委托,需要创建**DelegateAdapter**
+- ILRuntime中使用Unity项目的委托,需要创建**DelegateAdapter**
 
--   ILRuntime中继承Unity项目中的类,需要实现**继承适配器**
+- ILRuntime中继承Unity项目中的类,需要实现**继承适配器**
 
--   通常情况下，如果要从热更DLL中调用Unity主工程或者Unity的接口，是需要通过反射接口来调用的，包括市面上不少其他热更方案，也是通过这种方式来对CLR方接口进行调用的。(反射一个类,然后创建对象,然后保存到runtime中,调用方法也是通过反射)
+- 通常情况下，如果要从热更DLL中调用Unity主工程或者Unity的接口，是需要通过反射接口来调用的，包括市面上不少其他热更方案，也是通过这种方式来对CLR方接口进行调用的。(反射一个类,然后创建对象,然后保存到runtime中,调用方法也是通过反射)
 
-    但是这种方式有着明显的弊端，最突出的一点就是通过反射来调用接口调用效率会比直接调用低很多，再加上反射传递函数参数时需要使用`object[]`数组，这样不可避免的每次调用都会产生不少GC Alloc。众所周知GC Alloc高意味着在Unity中执行会存在较大的性能问题。
+  但是这种方式有着明显的弊端，最突出的一点就是通过反射来调用接口调用效率会比直接调用低很多，再加上反射传递函数参数时需要使用`object[]`数组，这样不可避免的每次调用都会产生不少GC Alloc。众所周知GC Alloc高意味着在Unity中执行会存在较大的性能问题。
 
-    ILRuntime通过CLR方法绑定机制，可以`选择性`的对经常使用的CLR接口进行直接调用，从而尽可能的消除反射调用开销以及额外的`GC Alloc`
+  ILRuntime通过CLR方法绑定机制，可以`选择性`的对经常使用的CLR接口进行直接调用，从而尽可能的消除反射调用开销以及额外的`GC Alloc`
 
-    CLR绑定借助了ILRuntime的CLR重定向机制来实现，因为实质上也是将对CLR方法的反射调用重定向到我们自己定义的方法里面来。
+  CLR绑定借助了ILRuntime的CLR重定向机制来实现，因为实质上也是将对CLR方法的反射调用重定向到我们自己定义的方法里面来。
 
 # 相关链接
 
--   <https://docs.microsoft.com/zh-cn/dotnet/framework/app-domains/use>
+- <https://docs.microsoft.com/zh-cn/dotnet/framework/app-domains/use>
 
--   <https://www.cnblogs.com/murongxiaopifu/p/4278947.html>
+- <https://www.cnblogs.com/murongxiaopifu/p/4278947.html>
 
--   <https://www.cnblogs.com/murongxiaopifu/p/4211964.html>
+- <https://www.cnblogs.com/murongxiaopifu/p/4211964.html>
 
--   <https://www.cnblogs.com/zblade/p/9100146.html>
+- <https://www.cnblogs.com/zblade/p/9100146.html>
 
--   <http://ourpalm.github.io/ILRuntime/public/v1/guide/bind.html>
+- <http://ourpalm.github.io/ILRuntime/public/v1/guide/bind.html>
 
--   <https://www.jianshu.com/p/4bef7f66aefd>
+- <https://www.jianshu.com/p/4bef7f66aefd>

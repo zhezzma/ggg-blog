@@ -2,7 +2,7 @@
 title : "基于 Game Object Conversion 和 SubScene 的 DOTS 开发工作流"
 ---
 
-*(译前言: Unity DOTS提出了一套全新的开发技术栈, 但目前少有精讲如何结合现有工作流进行开发的资料, 外网 *[*这篇文章 (Game Object Conversion and SubScene)*](https://link.zhihu.com/?target=https%3A//gametorrahod.com/game-object-conversion-and-subscene/)* 详细解构了基于 GameObject 和 Subscene 的工作流程和原理, 要求读者对 DOTS/ECS 有基本的了解, 虽然非常之长, 但值得一读)*
+*(译前言: Unity DOTS提出了一套全新的开发技术栈, 但目前少有精讲如何结合现有工作流进行开发的资料, 外网 *[*这篇文章 (Game Object Conversion and SubScene)*](https://link.zhihu.com/?target=https%3A//gametorrahod.com/game-object-conversion-and-subscene/) 详细解构了基于 GameObject 和 Subscene 的工作流程和原理, 要求读者对 DOTS/ECS 有基本的了解, 虽然非常之长, 但值得一读)
 
 ***
 
@@ -193,13 +193,13 @@ Worker 线程现在已经在工作了. 当你用这种方式构建游戏, 最终
 
 只不过你无法在 jobs 使用这些类型, 很多有 `IComponentData` 约束的泛型 API 也无法被使用. 但是这种类型的组件确实是关联到 Entity 上的, 也有相关的 API 可以使用. 以下是一些支持 component objects API 例子:
 
--   `EntityManager`:`AddComponentObject`,`GetComponentObject`. 如果添加不存在的组件, 你在获取时会得到一个 null.
+- `EntityManager`:`AddComponentObject`,`GetComponentObject`. 如果添加不存在的组件, 你在获取时会得到一个 null.
 
--   `ComponentType`: 你可以创建 `<T>` (如`MonoBehaviour`)类型的 `ComponentType`
+- `ComponentType`: 你可以创建 `<T>` (如`MonoBehaviour`)类型的 `ComponentType`
 
--   `system.GetEntityQuery`,`em.CreateArchetype`: 因此你可以使用`MonoBehaviour`类型的 `ComponentType` 来创建组件的查询.
+- `system.GetEntityQuery`,`em.CreateArchetype`: 因此你可以使用`MonoBehaviour`类型的 `ComponentType` 来创建组件的查询.
 
--   `EntityQuery`:`ToComponentArray`会返回 `T[]`. 这会返回以托管数组方式存储托管组件的结果, 而不是`ToComponentDataArray`那样返回 `NativeArray<T>`
+- `EntityQuery`:`ToComponentArray`会返回 `T[]`. 这会返回以托管数组方式存储托管组件的结果, 而不是`ToComponentDataArray`那样返回 `NativeArray<T>`
 
 ## Conversion world, destination world, primary entity
 
@@ -344,11 +344,11 @@ ECS 里有一个`Parent`组件, 该组件仅有一个`Entity`字段用来表示 
 
 你可能会猜测所有 chunk 都会有 `Parent` 而对于根部的 A, 其`Parent`则可以是一个 `Entity.Null` , 但是 Unity 并没有选择这样做, 因为在复杂一些的游戏里, 查询时使用`ComponentType.Exclude` 会相对更加高效一点. (你可以想象成如果没有parent组件, transform systems 可以忽略掉一些矩阵运算.)
 
--   没有 Parent, 但有 child : A
+- 没有 Parent, 但有 child : A
 
--   Parent 和 Child 都有: F
+- Parent 和 Child 都有: F
 
--   叶子节点, 仅有 Child: B E H G
+- 叶子节点, 仅有 Child: B E H G
 
 你可以看到还有一些 component 被添加了: `LocalToParent`,`Child`,`PreviousParent`.目前还无需关心它们, 总之它们会最终参与`LocalToWorld`的计算.
 
@@ -370,9 +370,9 @@ ECS 里有一个`Parent`组件, 该组件仅有一个`Entity`字段用来表示 
 
 假如:
 
--   你想保留原始的 game object
+- 你想保留原始的 game object
 
--   同时想在 conversion world 销毁之前导出 **component objects** 给 primary entity. (当然也包含转换过程中新增的 components)
+- 同时想在 conversion world 销毁之前导出 **component objects** 给 primary entity. (当然也包含转换过程中新增的 components)
 
 如前文中提到的, 我有`Hello`和`LineRenderer`会被带进 conversion world , 但由于并没有conversion system会处理`Hello`和`LineRenderer`, 因此会在 conversion world 被销毁时也同时被销毁.
 
@@ -520,11 +520,11 @@ public class BlinkingButton : MonoBehaviour, IConvertGameObjectToEntity
 
 `LinkedEntityGroup`是一个 dynamic buffer , 通常它会影响:
 
--   调用`Instantiate`方法时, 会同时实例化所有 buffer 中的 entity, 同时也会创建相同的`LinkedEntityGroup`. 注意实例化并不一定和ECS中的`Prefab` component 直接关联.
+- 调用`Instantiate`方法时, 会同时实例化所有 buffer 中的 entity, 同时也会创建相同的`LinkedEntityGroup`. 注意实例化并不一定和ECS中的`Prefab` component 直接关联.
 
--   调用`DestroyEntity`时也会同时销毁 `LinkedEntityGroup`中的所有 entity. 类似在编辑器中删除`GameObject`
+- 调用`DestroyEntity`时也会同时销毁 `LinkedEntityGroup`中的所有 entity. 类似在编辑器中删除`GameObject`
 
--   调用 `entityManager.SetEnabled` 加上的 `Disabled`component 会告知 ECS 的查询系统忽略它们, 而 `LinkedEntityGroup` 中的 entity 也会受到同样的影响. 有点类似禁用`GameObject` 时同时会禁用整个层级树.
+- 调用 `entityManager.SetEnabled` 加上的 `Disabled`component 会告知 ECS 的查询系统忽略它们, 而 `LinkedEntityGroup` 中的 entity 也会受到同样的影响. 有点类似禁用`GameObject` 时同时会禁用整个层级树.
 
 注意如果buffer 中的 entity 也有`LinkedEntityGroup`, 系统**不会递归地**执行instantiation/destroy/disabled 过程.
 
@@ -576,13 +576,13 @@ Unity 也在其他一些地方执行这一过程, 比如在转换 prefab **asset
 
 这意味着:
 
--   **每个 Entity** 关联的`LinkedEntityGroup`(或者其他未指定 capacity 的buffer) 将占据 128 bytes. 这是 chunk 容积变小的原因.
+- **每个 Entity** 关联的`LinkedEntityGroup`(或者其他未指定 capacity 的buffer) 将占据 128 bytes. 这是 chunk 容积变小的原因.
 
--   层级中超过16个子对象并不是什么好事, 一旦超过这个数量, 这些 linked entities 不得不从排列良好的 chunk 内存中挪到堆内存中. 可能 Unity 认为 16 是一个不太可能达到的值, 而 8 又太过于常见.
+- 层级中超过16个子对象并不是什么好事, 一旦超过这个数量, 这些 linked entities 不得不从排列良好的 chunk 内存中挪到堆内存中. 可能 Unity 认为 16 是一个不太可能达到的值, 而 8 又太过于常见.
 
--   除非显式调用, `LinkedEntityGroup`仅仅在 prefab 的 conversion 过程中被自动创建, 因此你只需要注意你的 prefab 里面嵌套的 `GameObject` 数量
+- 除非显式调用, `LinkedEntityGroup`仅仅在 prefab 的 conversion 过程中被自动创建, 因此你只需要注意你的 prefab 里面嵌套的 `GameObject` 数量
 
--   在运行时, 所有嵌套 prefab 和 prefab variant 工作流并不受影响, 系统内部只把它们看过一个单独的 prefab. 你无法把嵌套 prefab 从父 prefab 中拿出来, 并期望`LinkedEntityGroup`正常工作.
+- 在运行时, 所有嵌套 prefab 和 prefab variant 工作流并不受影响, 系统内部只把它们看过一个单独的 prefab. 你无法把嵌套 prefab 从父 prefab 中拿出来, 并期望`LinkedEntityGroup`正常工作.
 
 最后, 16kb 一个 chunk 意味着 1MB 大概包含 60 个 chunk. 如上例, 你能在 1MB 存储大约 2700 个转换后的GameObject , 这样看来或许45 的 chunk 容量也不用太担心了(当然具体情况具体分析).
 
@@ -763,13 +763,13 @@ public struct PrefabConversion : IComponentData
 
 ![img](../../public/images/2020-10-19-game-object-conversion-and-subscene/v2-eca8ecacce32b7cb618f690308873ba7_720w.jpg)
 
--   如果我们 convert 位于 scene 中的 CubeHead, 我们无法获取到LinkedEntityGroup. 该行为仅仅针对 prefab asset, 其目的显然是为了实例化. (链锁销毁行为也一样)
+- 如果我们 convert 位于 scene 中的 CubeHead, 我们无法获取到LinkedEntityGroup. 该行为仅仅针对 prefab asset, 其目的显然是为了实例化. (链锁销毁行为也一样)
 
--   LinkedEntityGroup 包含层级树下的所有对象以及自己, 包括 cube 3 和 cube 4. Conversion过程让 prefab "线性化"了, 实例化过程就无需递归调用了, 是需要遍历 LinkedEntityGroup即可.
+- LinkedEntityGroup 包含层级树下的所有对象以及自己, 包括 cube 3 和 cube 4. Conversion过程让 prefab "线性化"了, 实例化过程就无需递归调用了, 是需要遍历 LinkedEntityGroup即可.
 
--   前文提到过, 之所以LinkedEntityGroup包含它自己是因为 SetEnable 可以一次性完成工作, 而不是一个接一个的调用.
+- 前文提到过, 之所以LinkedEntityGroup包含它自己是因为 SetEnable 可以一次性完成工作, 而不是一个接一个的调用.
 
--   所有转换后的 entity 都会添加 Prefab组件, 但是我们只需要使用最顶层的那个 Entity 用于实例化. 事实上, 实例化过程没有Prefab 什么事儿, 主要是用LinkedEntityGroup 来完成工作. 实际上你可以实例化任何 entity.
+- 所有转换后的 entity 都会添加 Prefab组件, 但是我们只需要使用最顶层的那个 Entity 用于实例化. 事实上, 实例化过程没有Prefab 什么事儿, 主要是用LinkedEntityGroup 来完成工作. 实际上你可以实例化任何 entity.
 
 **为禁用功能准备的自动LinkedEntityGroup**
 
@@ -872,7 +872,7 @@ public class SpecialCube : MonoBehaviour, IConvertGameObjectToEntity
 
 这时我们检查一下conversion 的Prefab entity 的结果(烘焙对于单个 Entity 或者 Entity buffer 都有效), 我们期望我们人工添加的 LinkedEntityGroup 包含对于 Prefab 同级的引用.
 
-!\[img]\(data/svg+xml;utf8,)
+!\[img\](data/svg+xml;utf8,)
 
 当你调用Instantiate时, 一旦它发现可以被 Remap 的情况(如LinkedEntityGroup) Remapping 就会发生. 因此在 conversion 把它变成 Prefab 之前, "连接" Entity 引用是非常有用的, 这样一旦你Instantiate 它, 里面包含的 Entity 关系就已经可用了.
 
@@ -1089,7 +1089,7 @@ GameObjectExportGroup.Update()
 
 LinkedEntityGroup和Prefab 并未就绪! 缺乏LinkedEntityGroup导致我们最终的结果里仅仅实例化了最顶层的那个 cube. 因此在conversion过程中你无法这样使用刚刚声明的 Prefab. 如果你不清楚 conversion 流程, 很难知道为什么会有这样的结果.
 
-## \[GenerateAuthoringComponent]
+## \[GenerateAuthoringComponent\]
 
 SpawnHere->SpawnHereEcs 这种模式要求你有一个 MonoBehaviourcomponent 在 inspector 中暴露一些字段, 然后在 conversion 后转换为等价的数据. 我们把这个MonoBehaviour称为 **authoring component.**
 
@@ -1395,9 +1395,9 @@ public static Entity ConvertGameObjectHierarchy(GameObject root, GameObjectConve
 
 root 自然是你想要 convert 的对象, 方法名字有 "hierarchy", 它知道如何处理这些情况:
 
--   如果root 是 prefab asset, 那么你得到的结果和前述在 conversion 中声明 prefab 的结果一样. 如果你不喜欢声明和创建 prefab entity 绑定在一起, 那么你可以一个一个来.
+- 如果root 是 prefab asset, 那么你得到的结果和前述在 conversion 中声明 prefab 的结果一样. 如果你不喜欢声明和创建 prefab entity 绑定在一起, 那么你可以一个一个来.
 
--   如果root 是 scene 中的对象, 它会和ConvertToEntity的工作模式类似, 要注意这个方法同时也会执行LinkedEntityGroup过程.
+- 如果root 是 scene 中的对象, 它会和ConvertToEntity的工作模式类似, 要注意这个方法同时也会执行LinkedEntityGroup过程.
 
 settings可以通过 destination world 来获得:
 
@@ -1434,19 +1434,19 @@ public static void ConvertIncremental(World conversionWorld, IEnumerable<GameObj
 
 现在你已经可以使用 GameObject 来编辑游戏, 在 ECS 的环境里运行了, 那么还缺点啥?
 
--   你可能想要在**编辑模式**时查看 conversion 的结果, 无论你多么小心地设计 conversion 过程都有可能出错.
+- 你可能想要在**编辑模式**时查看 conversion 的结果, 无论你多么小心地设计 conversion 过程都有可能出错.
 
--   你太懒了, 不想复制粘贴ConvertToEntity, 或者使用 utility 里的 Scene 方法.
+- 你太懒了, 不想复制粘贴ConvertToEntity, 或者使用 utility 里的 Scene 方法.
 
--   你想在发布游戏时, 游戏能预先转换好(**pre-converted**). 当加载 scene 时你就可以不用再重新运行转换过程, 而是加载 chunk 内存直接使用.
+- 你想在发布游戏时, 游戏能预先转换好(**pre-converted**). 当加载 scene 时你就可以不用再重新运行转换过程, 而是加载 chunk 内存直接使用.
 
--   你懒得点"序列化 ECS 内存" 按钮来保存play mode下的内存供运行时使用, 更懒得添加内存加载的代码.
+- 你懒得点"序列化 ECS 内存" 按钮来保存play mode下的内存供运行时使用, 更懒得添加内存加载的代码.
 
--   在 play mode 时, 你不想让这些 pure Entity 从 Hierarchy 窗口消失. (当然你也不想使用 inject 模式来实现, 这会导致重复绘制对象的问题). 在 inspector 快速查看和修改运行时的对象非常有用.
+- 在 play mode 时, 你不想让这些 pure Entity 从 Hierarchy 窗口消失. (当然你也不想使用 inject 模式来实现, 这会导致重复绘制对象的问题). 在 inspector 快速查看和修改运行时的对象非常有用.
 
 ![img](../../public/images/2020-10-19-game-object-conversion-and-subscene/v2-c924c16e23d2b941e4058ae2a720f115_b.jpg)
 
--   你可能想要一边修改内容, 一边实时 convert 这些数据. (比如调整Transform后里面更新到 LocalToWorld/Translation)
+- 你可能想要一边修改内容, 一边实时 convert 这些数据. (比如调整Transform后里面更新到 LocalToWorld/Translation)
 
 好消息是, 以上内容在 Subscene 里都是可行的! subscene 并不是比scene "少" 些东西, 而是被设计为可以嵌套进普通 scene 中的工具. 它的能力甚至比普通的 scene 要更强.
 

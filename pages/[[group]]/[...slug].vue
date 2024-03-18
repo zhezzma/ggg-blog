@@ -19,9 +19,8 @@ definePageMeta({
             </div>
           </article>
         </template>
-        <template #empty="{ doc }">
-          <h1>{{ doc.title }}</h1>
-          <h1>....</h1>
+        <template #empty>
+          <h1>Empty</h1>
         </template>
         <template #not-found>
           <h1>Not found</h1>

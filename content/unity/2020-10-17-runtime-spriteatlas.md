@@ -261,7 +261,6 @@ public class NxImage : Image
  
     }
 }
-
 ```
 
 简单挂了几个图片上去测试，效果如下：
@@ -280,6 +279,6 @@ public class NxImage : Image
 
 以上就是动态生成图集的简单思路 仅供参考
 
--   [DaVikingCode/UnityRuntimeSpriteSheetsGenerator: Unity – generate SpriteSheets at runtime! (github.com)](https://github.com/DaVikingCode/UnityRuntimeSpriteSheetsGenerator)
+- [DaVikingCode/UnityRuntimeSpriteSheetsGenerator: Unity – generate SpriteSheets at runtime! (github.com)](https://github.com/DaVikingCode/UnityRuntimeSpriteSheetsGenerator)
 
--   [jintiao/RuntimeTextureAtlas: runtime texture atlas (github.com)](https://github.com/jintiao/RuntimeTextureAtlas)
+- [jintiao/RuntimeTextureAtlas: runtime texture atlas (github.com)](https://github.com/jintiao/RuntimeTextureAtlas)

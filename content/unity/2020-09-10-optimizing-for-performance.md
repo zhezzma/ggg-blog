@@ -20,22 +20,22 @@ Unity 的垃圾收集（使用 [Boehm GC 算法](https://en.wikipedia.org/wiki/B
 
 ### CPU
 
-1.  Unity 不使用字符串名称对 Animator、Material 和 Shader 属性进行内部寻址。为了加快速度，所有属性名称都经过哈希处理为属性 ID，实际上正是这些 ID 用于寻址属性。[Animator.StringToHash](https://docs.unity3d.com/cn/2020.2/ScriptReference/Animator.StringToHash.html) 是用于 Animator 属性名称的对应 API，[Shader.PropertyToID](https://docs.unity3d.com/cn/2020.2/ScriptReference/Shader.PropertyToID.html) 是用于 Material 和 Shader 属性名称的对应 API。
+ 1. Unity 不使用字符串名称对 Animator、Material 和 Shader 属性进行内部寻址。为了加快速度，所有属性名称都经过哈希处理为属性 ID，实际上正是这些 ID 用于寻址属性。[Animator.StringToHash](https://docs.unity3d.com/cn/2020.2/ScriptReference/Animator.StringToHash.html) 是用于 Animator 属性名称的对应 API，[Shader.PropertyToID](https://docs.unity3d.com/cn/2020.2/ScriptReference/Shader.PropertyToID.html) 是用于 Material 和 Shader 属性名称的对应 API。
 
-2.  将 [RaycastAll](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.RaycastAll.html) 调用替换为 [RaycastNonAlloc](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.RaycastNonAlloc.html)，将 [SphereCastAll](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.SphereCastAll.html) 调用替换为 [SphereCastNonAlloc](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.SphereCastNonAlloc.html)，以此类推。对于 2D 应用程序，也存在所有 Physics2D 查询 API 的非分配版本。
+ 2. 将 [RaycastAll](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.RaycastAll.html) 调用替换为 [RaycastNonAlloc](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.RaycastNonAlloc.html)，将 [SphereCastAll](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.SphereCastAll.html) 调用替换为 [SphereCastNonAlloc](https://docs.unity3d.com/cn/2020.2/ScriptReference/Physics.SphereCastNonAlloc.html)，以此类推。对于 2D 应用程序，也存在所有 Physics2D 查询 API 的非分配版本。
 
-3.  请避免在紧凑循环中或每帧运行的代码中进行UnityEngine.Object 子类和 Null 比较。Il2cpp中此过程必须执行查找和验证以便将脚本引用转换为对原生代码的引用。
+ 3. 请避免在紧凑循环中或每帧运行的代码中进行UnityEngine.Object 子类和 Null 比较。Il2cpp中此过程必须执行查找和验证以便将脚本引用转换为对原生代码的引用。
 
-4.  整数数学比浮点数学更快，而浮点数学比矢量、矩阵或四元数运算更快。每当交换或关联算术允许时，请尝试最小化单个数学运算的成本
+ 4. 整数数学比浮点数学更快，而浮点数学比矢量、矩阵或四元数运算更快。每当交换或关联算术允许时，请尝试最小化单个数学运算的成本
 
-5.  最好完全避免在生产代码中使用 `Object.Find` 和 `Object.FindObjectOfType`。还有`Camera.main`也使用了`FindGameObjectsWithTag`,由于此类 API 要求 Unity 遍历内存中的所有游戏对象和组件，因此它们会随着项目规模的扩大而产生性能问题。(除了单例,因为有缓存)
+ 5. 最好完全避免在生产代码中使用 `Object.Find` 和 `Object.FindObjectOfType`。还有`Camera.main`也使用了`FindGameObjectsWithTag`,由于此类 API 要求 Unity 遍历内存中的所有游戏对象和组件，因此它们会随着项目规模的扩大而产生性能问题。(除了单例,因为有缓存)
 
-6.  在紧凑循环中尽量少用`属性(get,set)`和`方法`,调用的每个方法都必须在内存中找到该方法的地址，并将另一个帧推入栈。所有这些操作都是有成本的，但在大多数代码中，它们都小到可以忽略不计.但是，在紧凑循环中运行较小的方法时，因引入额外方法调用而增加的开销可能会变得非常显著，甚至占主导地位。.例如
+ 6. 在紧凑循环中尽量少用`属性(get,set)`和`方法`,调用的每个方法都必须在内存中找到该方法的地址，并将另一个帧推入栈。所有这些操作都是有成本的，但在大多数代码中，它们都小到可以忽略不计.但是，在紧凑循环中运行较小的方法时，因引入额外方法调用而增加的开销可能会变得非常显著，甚至占主导地位。.例如
 
     ```
     int Accum { get; set; }
     Accum = 0;
-
+    
     for(int i = 0;
            i < myList.Count;    // myList.Count 调用 Count 属性上的 get 方法
            i++) {
@@ -44,43 +44,43 @@ Unity 的垃圾收集（使用 [Boehm GC 算法](https://en.wikipedia.org/wiki/B
     myList[i];  // [] 运算符调用列表的 get_Value 方法来检索列表特定索引位置的项值。
     ```
 
-7.  移除空的MonoBehaviour方法start update awake..理由同上
+ 7. 移除空的MonoBehaviour方法start update awake..理由同上
 
-8.  不要在运行时使用AddComponent将组件添加到GameObjects可能是一项非常昂贵的操作。因为他会先看组件有没有DisallowMultipleComponent的设置,然后又重复上述的检查一次最后还需要调用所有被加入的monobehaviour的awake方法,这些所有步骤都发生在堆内存上
+ 8. 不要在运行时使用AddComponent将组件添加到GameObjects可能是一项非常昂贵的操作。因为他会先看组件有没有DisallowMultipleComponent的设置,然后又重复上述的检查一次最后还需要调用所有被加入的monobehaviour的awake方法,这些所有步骤都发生在堆内存上
 
-9.  不要使用Texture2D.SetPixels() ,使用Texture2D.SetPixels32() 或者 GetRawTextureData()/Apply() 代替
+ 9. 不要使用Texture2D.SetPixels() ,使用Texture2D.SetPixels32() 或者 GetRawTextureData()/Apply() 代替
 
 10. 尽量避免调用Object.Instantiate再经常更新的代码。这里可以使用poolmanager代替
 
 ### GPU
 
-1.  meshreander->lighting -> cast shadows关闭阴影投射
+1. meshreander->lighting -> cast shadows关闭阴影投射
 
-2.  尽可能少的light,然后只对特定曾有用
+2. 尽可能少的light,然后只对特定曾有用
 
-3.  过高的分辨率会造成手机发热..可以使用Screen.SetResolution(width,height,false)
+3. 过高的分辨率会造成手机发热..可以使用Screen.SetResolution(width,height,false)
 
-4.  启用GPU实例化,[GPU 实例化 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/GPUInstancing.html)
+4. 启用GPU实例化,[GPU 实例化 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/GPUInstancing.html)
 
 ### UI
 
-1.  将对象隐藏起来,而不是移动到屏幕外边..因为摄像机依然能看到这些对象,依然会被渲染
+ 1. 将对象隐藏起来,而不是移动到屏幕外边..因为摄像机依然能看到这些对象,依然会被渲染
 
-2.  如果UI元素改变数值或是位置,会影响批次处理,造成对Gpu发送更多drawcall,所以将更新频率不同的ui分再不同的画布上
+ 2. 如果UI元素改变数值或是位置,会影响批次处理,造成对Gpu发送更多drawcall,所以将更新频率不同的ui分再不同的画布上
 
-3.  同张画布中的ui元素要有一样的z值
+ 3. 同张画布中的ui元素要有一样的z值
 
-4.  ui元素必须拥有一样的材质和纹理
+ 4. ui元素必须拥有一样的材质和纹理
 
-5.  对象拥有一样的clipping rect(矩形裁剪范围)
+ 5. 对象拥有一样的clipping rect(矩形裁剪范围)
 
-6.  去掉不需要的Graphic Raycaster,每次当用户点击触发事件时,系统就会遍历所有可能接收输入事件的ui元素,这会造成多次"点落再矩形中"检查,来判断对象是否该做出反应
+ 6. 去掉不需要的Graphic Raycaster,每次当用户点击触发事件时,系统就会遍历所有可能接收输入事件的ui元素,这会造成多次"点落再矩形中"检查,来判断对象是否该做出反应
 
-7.  如果打开了全屏ui,把渲染3d场景的摄像机关掉
+ 7. 如果打开了全屏ui,把渲染3d场景的摄像机关掉
 
-8.  如果打开了全屏ui,隐藏其他被遮蔽的ui,如果可以,建议你关闭canvas组件,而不是游戏对象本身,这样能减少画布再次出现的时间.禁用canvase组件会阻止画布向Gpu发起绘图调用,所以该画布不再可见,然后,此时该画布不会丢弃它的顶点缓冲区,它会保留所有网格和顶点,当重新启用时,不会触发重构过程,它只会重新绘制画布内容.此外禁用canvas组件不会触发canvas层级上性能消耗较大的ondisable/onenable回调,禁用子组件时要小心,注意它是否运行性能消耗较大的每帧代码.
+ 8. 如果打开了全屏ui,隐藏其他被遮蔽的ui,如果可以,建议你关闭canvas组件,而不是游戏对象本身,这样能减少画布再次出现的时间.禁用canvase组件会阻止画布向Gpu发起绘图调用,所以该画布不再可见,然后,此时该画布不会丢弃它的顶点缓冲区,它会保留所有网格和顶点,当重新启用时,不会触发重构过程,它只会重新绘制画布内容.此外禁用canvas组件不会触发canvas层级上性能消耗较大的ondisable/onenable回调,禁用子组件时要小心,注意它是否运行性能消耗较大的每帧代码.
 
-9.  尽可能的降低帧率,如果有个静态的ui,就没有必要设置帧率到60
+ 9. 尽可能的降低帧率,如果有个静态的ui,就没有必要设置帧率到60
 
 10. 如果texture是中心镂空且切图为九宫格时，可以去除fill center，以减少over draw。
 
@@ -98,17 +98,17 @@ Unity 的垃圾收集（使用 [Boehm GC 算法](https://en.wikipedia.org/wiki/B
 
 为什么使用图集?
 
-1.  图片尺寸为2的次幂时，GPU处理起来会快很多，小图自己是做不到每张图都是2的次幂的，但打成一张大图就可以（浪费一点也无所谓）；
+1. 图片尺寸为2的次幂时，GPU处理起来会快很多，小图自己是做不到每张图都是2的次幂的，但打成一张大图就可以（浪费一点也无所谓）；
 
-2.  CPU在传送资源信息给GPU时，只需要传一张大图就可以了，因为GPU可以在这张图中的不同区域进行采样，然后拼出对应的界面。注意，这就是为什么需要用同一个Source Image图集的原因，是Batch的关键，因为一个Drawcall就把所有原材料传过去了，GPU你画去吧
+2. CPU在传送资源信息给GPU时，只需要传一张大图就可以了，因为GPU可以在这张图中的不同区域进行采样，然后拼出对应的界面。注意，这就是为什么需要用同一个Source Image图集的原因，是Batch的关键，因为一个Drawcall就把所有原材料传过去了，GPU你画去吧
 
 但是显然把所有图片打成一张图集是不合理的，因为这张图可能非常大，所以就要按照一定规则将图片进行分类。在分类思路上，我们希望做到Drawcall尽可能少，同时资源量也尽可能少（多些重用），但这两者某种程度上是互斥的，所以折衷一下，可以遵循以下思路：
 
--   设计UI时要考虑重用性，如一些边框、按钮等，这些作为共享资源，放在1\~3张大图集中，称为**重用图集**；
+- 设计UI时要考虑重用性，如一些边框、按钮等，这些作为共享资源，放在1\~3张大图集中，称为**重用图集**；
 
--   其它非重用UI按照功能模块进行划分，每个模块使用1\~2张图集，为**功能图集**；
+- 其它非重用UI按照功能模块进行划分，每个模块使用1\~2张图集，为**功能图集**；
 
--   对于一些UI，如果同时用到**功能图集**与**重用图集**，但是其**功能图集**剩下的“空位”较多，则可以考虑将用到的**重用图集**中的元素单独拎出来，合入**功能图集**中，从而做到让UI只依赖于**功能图集**。也就是通过一定的冗余，来达到性能的提升。
+- 对于一些UI，如果同时用到**功能图集**与**重用图集**，但是其**功能图集**剩下的“空位”较多，则可以考虑将用到的**重用图集**中的元素单独拎出来，合入**功能图集**中，从而做到让UI只依赖于**功能图集**。也就是通过一定的冗余，来达到性能的提升。
 
 #### UGUI层级合并规则与批次生成规则
 
@@ -120,15 +120,15 @@ Unity的UI渲染顺序的确定有2个步骤，第一步计算每个UI元素的*
 
 先从直观的角度来解释**计算层级号的算法**：
 
--   如果有一个UI元素，它所占的屏幕范围内（通常是矩形），
+- 如果有一个UI元素，它所占的屏幕范围内（通常是矩形），
 
--   如果没有任何UI在它的底下，那么它的**层级号**就是0（最底下）；
+- 如果没有任何UI在它的底下，那么它的**层级号**就是0（最底下）；
 
--   如果有一个UI在其底下且该UI可以和它Batch，那它的**层级号**与底下的UI层级一样；
+- 如果有一个UI在其底下且该UI可以和它Batch，那它的**层级号**与底下的UI层级一样；
 
--   如果有一个UI在其底下但是无法与它Batch，那它的**层级号**为底下的UI的层级+1；
+- 如果有一个UI在其底下但是无法与它Batch，那它的**层级号**为底下的UI的层级+1；
 
--   如果有多个UI都在其下面，那么按前两种方式遍历计算所有的**层级号**，其中最大的那个作为自己的**层级号**。
+- 如果有多个UI都在其下面，那么按前两种方式遍历计算所有的**层级号**，其中最大的那个作为自己的**层级号**。
 
 这里也给一下伪代码，假设所有UI元素（抛弃层级关系）都按从上往下的顺序被装在一个list中，那么每个UI元素对应的**层级号**计算可以参考以下：
 
@@ -205,103 +205,103 @@ function MergeBatch(List UIEleLst)
 
 根据以上规则，就可以得出一些“摆UI”的技巧：
 
--   有相同材质和纹理的UI元素是可以Batch的，可以Batch的UI上下叠在一块不会影响性能，但是如果不能Batch的UI元素叠在一块，就会增加Drawcall开销。
+- 有相同材质和纹理的UI元素是可以Batch的，可以Batch的UI上下叠在一块不会影响性能，但是如果不能Batch的UI元素叠在一块，就会增加Drawcall开销。
 
--   要注意UI元素间的层叠关系，建议用“T”工具查看其矩形大小，因为有些图片透明，但是却叠在其它UI上面了，然后又无法Batch的话，就会无故多许多Drawcall；
+- 要注意UI元素间的层叠关系，建议用“T”工具查看其矩形大小，因为有些图片透明，但是却叠在其它UI上面了，然后又无法Batch的话，就会无故多许多Drawcall；
 
--   UI中出现最多的就是Image与Text组件，当Text叠在Image上面（如Button)，然后Text上又叠了一个图片时，就会至少多2个Drawcall，可以考虑将字体直接印在下面的图片上；
+- UI中出现最多的就是Image与Text组件，当Text叠在Image上面（如Button)，然后Text上又叠了一个图片时，就会至少多2个Drawcall，可以考虑将字体直接印在下面的图片上；
 
--   有些情况可以考虑人为增加层级从而减少Drawcall，比如一个Text的层级为0，另一个可Batch的Text叠在一个图片A上，层级为1，那此时2个Text因为层级不同会安排2个Drawcall，但如果在第一个Text下放一个透明的图片（与图片A可Batch），那两个Text的层级就一致了，Drawcall就可以减少一个。
+- 有些情况可以考虑人为增加层级从而减少Drawcall，比如一个Text的层级为0，另一个可Batch的Text叠在一个图片A上，层级为1，那此时2个Text因为层级不同会安排2个Drawcall，但如果在第一个Text下放一个透明的图片（与图片A可Batch），那两个Text的层级就一致了，Drawcall就可以减少一个。
 
 #### UI优化参考
 
--   [Unity GUI(uGUI)使用心得与性能总结 - 简书 (jianshu.com)](https://www.jianshu.com/p/061e67308e5f)
+- [Unity GUI(uGUI)使用心得与性能总结 - 简书 (jianshu.com)](https://www.jianshu.com/p/061e67308e5f)
 
--   [Some of the best optimization tips for Unity UI - Unity (unity3d.com)](https://unity3d.com/how-to/unity-ui-optimization-tips?_ga=2.147783095.1436155110.1558584716-746267689.1557026511)
+- [Some of the best optimization tips for Unity UI - Unity (unity3d.com)](https://unity3d.com/how-to/unity-ui-optimization-tips?_ga=2.147783095.1436155110.1558584716-746267689.1557026511)
 
 ### 内存
 
-1.  不要再update中重复实例化对象,使用了ecs同样注意,因为他也是执行在update中
+1. 不要再update中重复实例化对象,使用了ecs同样注意,因为他也是执行在update中
 
-2.  不要使用闭包和匿名方法,因为闭包和匿名方法都会都是引用类型(c#将生成一个匿名类)会在堆上进行分配
+2. 不要使用闭包和匿名方法,因为闭包和匿名方法都会都是引用类型(c#将生成一个匿名类)会在堆上进行分配
 
-3.  避免装箱..虽然 Unity 的分配器实际会使用不同的内存池进行小型和大型分配，但 Unity 的垃圾回收器“不是”分代的，因此无法有效清除由装箱生成的小型、频繁的临时分配。
+3. 避免装箱..虽然 Unity 的分配器实际会使用不同的内存池进行小型和大型分配，但 Unity 的垃圾回收器“不是”分代的，因此无法有效清除由装箱生成的小型、频繁的临时分配。
 
-4.  不要用foreach, Unity 的 C# 编译器生成的 IL 会构造一个通用值类型的枚举器来遍历值集合,而且通过枚举器遍历集合的方法调用成本更高，通常比通过 `for` 或 `while` 循环进行的手动迭代慢得多。
+4. 不要用foreach, Unity 的 C# 编译器生成的 IL 会构造一个通用值类型的枚举器来遍历值集合,而且通过枚举器遍历集合的方法调用成本更高，通常比通过 `for` 或 `while` 循环进行的手动迭代慢得多。
 
-5.  unityapi.. mesh.vertices和 Input.touches,每次访问 `.touches` 这些属性时都会发生分配。所以不要在循环和update中使用
+5. unityapi.. mesh.vertices和 Input.touches,每次访问 `.touches` 这些属性时都会发生分配。所以不要在循环和update中使用
 
-6.  避免使用`GetComponentsInChildren()`,`GetComponentsInParent()`,而是使用GetComponentsInChildren(bool includeInactive, List result);前者会分配托管内存,后者可以传入一个你保存的数组避免重新分配
+6. 避免使用`GetComponentsInChildren()`,`GetComponentsInParent()`,而是使用GetComponentsInChildren(bool includeInactive, List result);前者会分配托管内存,后者可以传入一个你保存的数组避免重新分配
 
-7.  不要使用linq因为会分配大量的托管内存
+7. 不要使用linq因为会分配大量的托管内存
 
-8.  不要使用Texture2D.GetPixels() ,使用`Texture2D.GetRawTextureData()`代替此方法返回像素数据的NativeArray,前者会有大量的托管内存
+8. 不要使用Texture2D.GetPixels() ,使用`Texture2D.GetRawTextureData()`代替此方法返回像素数据的NativeArray,前者会有大量的托管内存
 
 参考 :
 
--   [了解托管堆 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/BestPracticeUnderstandingPerformanceInUnity4-1.html)
+- [了解托管堆 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/BestPracticeUnderstandingPerformanceInUnity4-1.html)
 
--   [了解自动内存管理 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/UnderstandingAutomaticMemoryManagement.html)
+- [了解自动内存管理 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/UnderstandingAutomaticMemoryManagement.html)
 
--   [一般优化 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/BestPracticeUnderstandingPerformanceInUnity7.html)
+- [一般优化 - Unity 手册 (unity3d.com)](https://docs.unity3d.com/cn/2020.2/Manual/BestPracticeUnderstandingPerformanceInUnity7.html)
 
--   [Unite Now - （中文字幕）性能优化技巧（上）\_哔哩哔哩 (゜-゜)つロ 干杯\~-bilibili](https://www.bilibili.com/video/BV1Tt4y1X7f6)
+- [Unite Now - （中文字幕）性能优化技巧（上）\_哔哩哔哩 (゜-゜)つロ 干杯\~-bilibili](https://www.bilibili.com/video/BV1Tt4y1X7f6)
 
 ## 资源
 
 ### Animation
 
-1.  动画曲线精度过高会增加动画占用内存; 此规则仅面向以文本格式序列化的\*.anim文件中的浮点精度Custom Parameters: precision : 5
+1. 动画曲线精度过高会增加动画占用内存; 此规则仅面向以文本格式序列化的\*.anim文件中的浮点精度Custom Parameters: precision : 5
 
-    用文本编辑器打开.anim动画文件，修改m\_EditorCurves::curve::m\_Curve下的float值的精度。建议用脚本直接将此文件中所有float精度都调小。
+   用文本编辑器打开.anim动画文件，修改m_EditorCurves::curve::m_Curve下的float值的精度。建议用脚本直接将此文件中所有float精度都调小。
 
-2.  场景中Animator组件的cullingMode是AlwaysAnimate会增加CPU使用率。
+2. 场景中Animator组件的cullingMode是AlwaysAnimate会增加CPU使用率。
 
 ### Audio
 
--   如果不需要立体声,将音频文件设置为 Force To Mono,这样能省下一半的磁盘和内存
+- 如果不需要立体声,将音频文件设置为 Force To Mono,这样能省下一半的磁盘和内存
 
--   降低文件比特率
+- 降低文件比特率
 
--   ios下使用adpcm和mp3格式
+- ios下使用adpcm和mp3格式
 
--   安卓下使用vorbis格式
+- 安卓下使用vorbis格式
 
--   如果小型文件<200kb,load type设置成Decompress on Load,
+- 如果小型文件<200kb,load type设置成Decompress on Load,
 
--   如果中型文件>=200kb,load type 设置成Compressed in Memory
+- 如果中型文件>=200kb,load type 设置成Compressed in Memory
 
--   大型文件,如背景音乐,load type设置成streaming
+- 大型文件,如背景音乐,load type设置成streaming
 
--   如果时静音模式则销毁audiosourceComponent组件,如果设置成0的话,其实还是会造成不必要的内存与cpu占用
+- 如果时静音模式则销毁audiosourceComponent组件,如果设置成0的话,其实还是会造成不必要的内存与cpu占用
 
 ### EditorSetting
 
-1.  禁用 Accelerometer Frequency 陀螺仪
+1. 禁用 Accelerometer Frequency 陀螺仪
 
-2.  尝试开启graphicJobs并测试 检查Editor -> Project Settings -> PlayerSettings -> Graphic Jobs(Experimental)\*的设置
+2. 尝试开启graphicJobs并测试 检查Editor -> Project Settings -> PlayerSettings -> Graphic Jobs(Experimental)\*的设置
 
-3.  如果在项目中启用了physics, 可以考虑开启Prebake Collision Meshes选项 检查Editor -> Project Settings -> PlayerSettings -> PreBake Collision Meshes的设置,这项设置可以减少加载/初始化的时间, 虽然会增加一些构建时间和包体积
+3. 如果在项目中启用了physics, 可以考虑开启Prebake Collision Meshes选项 检查Editor -> Project Settings -> PlayerSettings -> PreBake Collision Meshes的设置,这项设置可以减少加载/初始化的时间, 虽然会增加一些构建时间和包体积
 
-4.  在Physics设置中LayerCollisionMatrix中的格子不应该都勾选上,这会增加CPU的负担, 应该取消勾选那些没有必要的格子 检查Editor -> Project Settings -> Physics -> Layer Collision Matrix的设置
+4. 在Physics设置中LayerCollisionMatrix中的格子不应该都勾选上,这会增加CPU的负担, 应该取消勾选那些没有必要的格子 检查Editor -> Project Settings -> Physics -> Layer Collision Matrix的设置
 
-5.  在Physics2D设置中LayerCollisionMatrix中的格子不应该都勾选上 同上
+5. 在Physics2D设置中LayerCollisionMatrix中的格子不应该都勾选上 同上
 
-6.  检查Graphics中StandardShaderQuality设置,这会增加编译时间和包体积, 除非你想要支持很多性能跨度很大的设备,检查Editor -> Project Settings -> Graphics -> Tiers -> Standard Shader Quality的设置,StandardShaderQuality选项在所有Graphics Tier中应相同
+6. 检查Graphics中StandardShaderQuality设置,这会增加编译时间和包体积, 除非你想要支持很多性能跨度很大的设备,检查Editor -> Project Settings -> Graphics -> Tiers -> Standard Shader Quality的设置,StandardShaderQuality选项在所有Graphics Tier中应相同
 
-7.  检查Android的ManagedStrippingLevel设置 检查Editor -> Project Settings -> PlayerSettings -> Managed Stripping Level的设置,Android设置中的ManagedStrippingLevel选项应为Medium或者High
+7. 检查Android的ManagedStrippingLevel设置 检查Editor -> Project Settings -> PlayerSettings -> Managed Stripping Level的设置,Android设置中的ManagedStrippingLevel选项应为Medium或者High
 
 ### Mesh
 
--   开启mesh compression,来减少磁盘容量
+- 开启mesh compression,来减少磁盘容量
 
--   尽量关闭read/write enabled 选项,如果开启unity会存储两份mesh
+- 尽量关闭read/write enabled 选项,如果开启unity会存储两份mesh
 
--   如果没有使用动画,关闭Rigs,如石头或者房子
+- 如果没有使用动画,关闭Rigs,如石头或者房子
 
--   如果没有用到Blendshapes,ye关闭
+- 如果没有用到Blendshapes,ye关闭
 
--   Normals and Tangents..法向量和切线信息,如果材质没用到.也关闭
+- Normals and Tangents..法向量和切线信息,如果材质没用到.也关闭
 
 ### Prefab
 
@@ -311,17 +311,17 @@ function MergeBatch(List UIEleLst)
 
 导入大小需要设置maxsize和compression,否则将导致文件过大.打包的时候会占体积
 
--   max size 尽可能的设置到最小
+- max size 尽可能的设置到最小
 
--   pot(大小为2的幂次方) or atlas
+- pot(大小为2的幂次方) or atlas
 
--   移除背景纹理和其他不透明纹理的alpha通道
+- 移除背景纹理和其他不透明纹理的alpha通道
 
--   关闭read/write,以减少内存使用
+- 关闭read/write,以减少内存使用
 
--   如果16bit color足够用了就不要使用 32bit
+- 如果16bit color足够用了就不要使用 32bit
 
--   如果不需要使用mipmaps 则禁用,例如 ui和sprites,或者相对于z值不会又任何变化的元素
+- 如果不需要使用mipmaps 则禁用,例如 ui和sprites,或者相对于z值不会又任何变化的元素
 
 ### Resources文件夹
 
@@ -347,23 +347,23 @@ function MergeBatch(List UIEleLst)
 
 在每次调用DrawCall之前，CPU需要向GPU发送很多内容，主要是包括数据，渲染状态（就是设置对象需要的材质纹理等），命令等。CPU进行的操作具体就是：
 
--   准备渲染对象，然后将渲染对象从硬盘加载到内存，然后从内存加载到显存，进而方便GPU高速处理
+- 准备渲染对象，然后将渲染对象从硬盘加载到内存，然后从内存加载到显存，进而方便GPU高速处理
 
--   设置每个对象的渲染状态，也就是设置对象的材质、纹理、着色器等
+- 设置每个对象的渲染状态，也就是设置对象的材质、纹理、着色器等
 
--   输出渲染图元，然后向GPU发送DrawCall命令，并将渲染图元传递给GPU
+- 输出渲染图元，然后向GPU发送DrawCall命令，并将渲染图元传递给GPU
 
 所以如果DrawCall数量过多就会导致CPU进行大量计算，进而导致CPU的过载，影响游戏运行效率。
 
 **三、批处理**
 
-1.  批处理的目的就是为了减少DrawCall。DrawCall即CPU命令GPU去绘制。
+1. 批处理的目的就是为了减少DrawCall。DrawCall即CPU命令GPU去绘制。
 
-2.  如果我们需要渲染一千个三角形，那么把它们按一千个单独的网格进行渲染所花费的时间要远大于直接渲染一个包含了一千个三角形的网格。
+2. 如果我们需要渲染一千个三角形，那么把它们按一千个单独的网格进行渲染所花费的时间要远大于直接渲染一个包含了一千个三角形的网格。
 
-3.  要想使用批处理，需要物体有相同的材质。这是因为，对于使用同一个材质的物体，它们的不同仅仅在于顶点数据的差别，我们可以把这些顶点数据合并在一起，再一起发送给GPU，就可以完成一次批处理。
+3. 要想使用批处理，需要物体有相同的材质。这是因为，对于使用同一个材质的物体，它们的不同仅仅在于顶点数据的差别，我们可以把这些顶点数据合并在一起，再一起发送给GPU，就可以完成一次批处理。
 
-4.  在unity中，有两种批处理：一是动态批处理，二是静态批处理。
+4. 在unity中，有两种批处理：一是动态批处理，二是静态批处理。
 
 对于动态批处理，unity会自动完成，不需要我们进行操作，而且物体是可以移动的，但是动态批处理有许多限制条件。
 对于静态批处理，物体不可移动，但是限制条件很少。
@@ -374,13 +374,13 @@ function MergeBatch(List UIEleLst)
 
 限制：
 
-1.  顶点属性要小于900。例如，如果shader中需要使用顶点位置、法线和纹理坐标这三个顶点属性，那么要想让模型能够被动态批处理，它的顶点数目不能超过300。因此，优化策略就是shader的优化，少使用顶点属性，或者模型顶点数要尽可能少。
+1. 顶点属性要小于900。例如，如果shader中需要使用顶点位置、法线和纹理坐标这三个顶点属性，那么要想让模型能够被动态批处理，它的顶点数目不能超过300。因此，优化策略就是shader的优化，少使用顶点属性，或者模型顶点数要尽可能少。
 
-2.  多Pass的shader会中断批处理。
+2. 多Pass的shader会中断批处理。
 
-3.  在unity5中，动态批处理对于模型缩放的限制已经不存在了。
+3. 在unity5中，动态批处理对于模型缩放的限制已经不存在了。
 
-4.  使用光照纹理的物体需要小心处理。为了让这些物体可以被动态批处理，需要保证它们指向光照纹理中的同一位置。
+4. 使用光照纹理的物体需要小心处理。为了让这些物体可以被动态批处理，需要保证它们指向光照纹理中的同一位置。
 
 **五、静态批处理**
 
@@ -394,7 +394,7 @@ function MergeBatch(List UIEleLst)
 
 参考链接:
 
--   [动态合批原理及如何成功合批 - Unity Connect](https://connect.unity.com/p/dong-tai-he-pi-yuan-li-ji-ru-he-cheng-gong-he-pi?app=true)
+- [动态合批原理及如何成功合批 - Unity Connect](https://connect.unity.com/p/dong-tai-he-pi-yuan-li-ji-ru-he-cheng-gong-he-pi?app=true)
 
 ## 渲染统计窗口
 
@@ -408,9 +408,9 @@ SetPass calls：跟Shader中Pass的数量有关，Pass越多这个越大...它�
 
 影响DrawCall的因素：
 
-1.  Pass越多DrawCall越大。可以通过FrameDebugger来查看DrawCall，当然也可以用Profiler，但后者不能查看DrawCall的具体情况。
+1. Pass越多DrawCall越大。可以通过FrameDebugger来查看DrawCall，当然也可以用Profiler，但后者不能查看DrawCall的具体情况。
 
-2.  不同材质的物体，无法通过静态批处理减少DC。但是静态批处理可以通过合并网格来提高性能。
+2. 不同材质的物体，无法通过静态批处理减少DC。但是静态批处理可以通过合并网格来提高性能。
 
 ## **Unity Profiler**
 

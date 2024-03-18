@@ -2,11 +2,11 @@
 title : "扒一扒.net、.net framework、mono和Unity"
 ---
 
-1.什么是CLR？
+1\.什么是CLR？
 
 CLR（Common Language Runtime）即公共语言运行时，是一个由多种编程语言使用的“运行时”，我的理解是就是运行环境，类似于jvm虚拟机的东西，只不过CLR并不关心你用的语言是什么，无论你用的是C#，或者C++等，当通过编译器编译后，都会转换为CLR可以识别的中间语言IL
 
-2.CLR的工作方式
+2\.CLR的工作方式
 
 CLR是不和模块工作的，它和程序集工作，如下
 
@@ -20,11 +20,11 @@ CLR是不和模块工作的，它和程序集工作，如下
 
 在方法执行前，CLR会检测代码引用的所有类型，然后分配一个内部数据结构来管理引用访问，在这个数据结构中每个方法会有一个对应的记录项，每个记录项都包含地址，根据地址找到函数的实现，CLR将每个记录项都设置成（指向）一个内部的未编档函数，即JITCompiler当方法首次调用WriteLine时，JITCompiler会被调用，将方法的IL代码编译为本机的CPU指令。当方法第一次被调用时，JIT编译器会验证IL代码，当第二次时，由于第一次已经完成了验证和编译，所以第二次会直接执行。
 
-1.Mono
+1\.Mono
 
 mono即基于.NET Framework 的开源实现，基于C#的ECMA标准，包含C#编译器和CLR。mono使C#拥有了跨平台的能力。
 
-2.为什么Mono能跨平台？
+2\.为什么Mono能跨平台？
 
 因为它使用了CIL（Common Intermediate Language）的通用中间语言，也叫MSIL的指令集，CIL可以在任何支持CLI（Common Language Infrastructure）“通用语言基础结构”的环境下运行，由于CIL能运行在所有支持CLI的环境中，比如.net运行时或者mono运行时，也就是说和具体的平台或者CPU无关。
 
@@ -72,7 +72,7 @@ mono即基于.NET Framework 的开源实现，基于C#的ECMA标准，包含C#�
 
 我们知道vs有一个东西叫VSTU，它最大的作用就是可以用vs的断点调试功能调试Unity Editor。Unity中的脚本在vs中打开的时候会构建一个VSTU项目。VSTU项目虽然跟普通VS项目看上去很像，但其实VSTU项目本质上并不是真正的vs项目，如果你右键项目->属性是没有反应的（VSTU 2.1以前有反应，之后就禁用了），而且右键项目中的引用也不会有添加引用选项，其实VSTU是把vs当做了一个功能强大的编辑器。
 
-但VSTU不只是利用了VS进行语法检查这么简单，它的另一个作用就是断点调试。在没有断点调试的情况下，Unity使用自己的编译器进行编译，生成Assembly-CSharp.dll（在/Library/目录中），点击Play按钮的时候用的是这个dll，而用VS进行断点调试的时候则会用VS的编译器编译出Assembly-CSharp.dll以及pdb文件，在\Temp\UnityVS\_obj\Debug\目录中，此时点击Play用的就是这个dll。当然build出exe的时候用的还是自己的编译器。
+但VSTU不只是利用了VS进行语法检查这么简单，它的另一个作用就是断点调试。在没有断点调试的情况下，Unity使用自己的编译器进行编译，生成Assembly-CSharp.dll（在/Library/目录中），点击Play按钮的时候用的是这个dll，而用VS进行断点调试的时候则会用VS的编译器编译出Assembly-CSharp.dll以及pdb文件，在\\Temp\\UnityVS_obj\\Debug\\目录中，此时点击Play用的就是这个dll。当然build出exe的时候用的还是自己的编译器。
 
 VSTU对项目进行了限制，不能直接在VS中添加新的dll，但可以拷贝到Unity项目的Asset目录下，这样Unity会重新构建VSTU项目，把拷进去的dll显示在引用列表里面。
 
@@ -80,7 +80,7 @@ VSTU构建的项目是基于.net framework 3.5的。因为Unity用的是mono 2.0
 
 其实也可以在Unity的安装目录中寻找一些端倪，在windows下为：
 
-C:\Program Files\Unity\Editor\Data\Mono\lib\mono\2.0
+C:\\Program Files\\Unity\\Editor\\Data\\Mono\\lib\\mono\\2.0
 
 这个目录2.0目测就是mono的版本，目录中有很多dll，比如System.\*.dll，这说明unity自带了mono项目，提供了mono 2.0中实现的基础类库。虽然Unity的脚本可以在像VS以及MonoDeveloper中打开，但是在build的时候用的还是Unity自带的Mono中的编译器，而Mono 2.0仅支持到C# 3.0，所以有些最新的语法在Unity里面是无法编译通过的（Unity 5.3.5 p8提供了一个新的编译器mono 4.4用于测试，但是似乎没有下文了）。
 
@@ -114,6 +114,6 @@ Unity最近因为加入了.Net基金会，出了几个用最新mono的测试版�
 
 Unity 5.5.0 b4里面API compability Level增加了一个4.6选项，其实是把原来的mono 2.0换成mono 4.6进行测试，mono 4.6支持C# 6.0，并且开发者可以使用.net 4.6的API写程序，然而也不知道什么时候能有稳定版。而且mono都快要被淘汰了，以后目测都是IL2CPP了。
 
--   <https://www.cnblogs.com/w-wfy/p/7450167.html>
+- <https://www.cnblogs.com/w-wfy/p/7450167.html>
 
--   <https://blog.csdn.net/wzjssssssssss/article/details/80196314>
+- <https://blog.csdn.net/wzjssssssssss/article/details/80196314>

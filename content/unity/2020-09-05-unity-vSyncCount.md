@@ -18,21 +18,21 @@ title : "UNITY的垂直同步和帧率"
 
 开启垂直同步时
 
-　　若游戏的实际显示帧速大于60，显卡就可以在显示器等待的1/60内完成绘制，显示一个无撕裂的画面。此时，游戏的帧速被限制为60。
+若游戏的实际显示帧速大于60，显卡就可以在显示器等待的1/60内完成绘制，显示一个无撕裂的画面。此时，游戏的帧速被限制为60。
 
-　　若游戏的实际显示帧速小于60，显卡无法在在显示器等待的1/60内完成绘制，假如游戏帧速50，那么显卡每2个显示器帧才向显示器刷新一次数据，此时，游戏帧速掉为30。
+若游戏的实际显示帧速小于60，显卡无法在在显示器等待的1/60内完成绘制，假如游戏帧速50，那么显卡每2个显示器帧才向显示器刷新一次数据，此时，游戏帧速掉为30。
 
 关闭垂直同步时
 
-　　若游戏的实际显示帧速大于60，显卡刷新显示缓冲的速度比显示器快，出现跳帧以及撕裂。
+若游戏的实际显示帧速大于60，显卡刷新显示缓冲的速度比显示器快，出现跳帧以及撕裂。
 
 （1）画面撕裂
 
 假设游戏中有一面黑白相间的栅栏墙高速向左运动，显示器设定的刷新率是100Hz，游戏运行速度为200FPS，则显示器扫描第1帧图像至屏幕垂直方向中点时，显卡已经将第2帧图像送了过来，由于栅栏墙高速向左运动，第2帧图像已经左移了一段距离，最终显示的图像如图（图01）。
 
-| ![获得完美游戏效果解析显卡垂直同步设置(2)](../../public/images/2020-09-05-unity-vSyncCount/1520729748.JPG) |
-| ---------------------------------------------------------------------------------------- |
-| 图1                                                                                       |
+|![获得完美游戏效果解析显卡垂直同步设置(2)](../../public/images/2020-09-05-unity-vSyncCount/1520729748.JPG)|
+|-|
+|图1|
 
 CS 1.5、Quake等大多数PC游戏在关闭垂直同步后都会有这种现象产生。如果你的电脑上装有CS 1.5游戏，不妨自己证实一下：关闭垂直同步后进入游戏，按下键盘上的左箭头"←"让视角匀速转动，是不是看到了"画面撕裂"的现象？打开垂直同步后做相同的测试，画面是不是清爽了许多？
 
@@ -41,9 +41,9 @@ CS 1.5、Quake等大多数PC游戏在关闭垂直同步后都会有这种现象�
 假如显示器设定的刷新率是80Hz，显卡以100FPS循环显示0-9数字，那么，在开始的0.1秒内，显卡显示了10个数字而显示器只刷新了8次，最终你看到的图像很可能是这样的：（表格如图02）
 可见，由于显示器刷新率跟不上游戏的FPS，只能舍弃一部分画面，这种现象表现在游戏里就是跳帧。鬼武者3等一些移植到PC上的游戏在关闭垂直同步时通常会出现这种问题。
 
-| ![获得完美游戏效果解析显卡垂直同步设置(2)](../../public/images/2020-09-05-unity-vSyncCount/1536901270.JPG) |
-| ---------------------------------------------------------------------------------------- |
-| 图2                                                                                       |
+|![获得完美游戏效果解析显卡垂直同步设置(2)](../../public/images/2020-09-05-unity-vSyncCount/1536901270.JPG)|
+|-|
+|图2|
 
 通过以上的了解，我们认识到，要想在游戏中获得更好的画质，垂直同步一定要开！正是由于垂直同步的存在，游戏才会有完整、稳速、不跳帧的画面。套用一句广告语来说："自从开了垂直同步后，画不破了，帧不跳了，头也不眩晕了。"
 
@@ -65,8 +65,8 @@ iOS忽略[QualitySettings](https://docs.unity3d.com/2020.2/Documentation/ScriptR
 
 以上仅参考文档推测...未进行验证....如有意外概不负责
 
--   [Unity - Scripting API: Application.targetFrameRate (unity3d.com)](https://docs.unity3d.com/2020.2/Documentation/ScriptReference/Application-targetFrameRate.html)
+- [Unity - Scripting API: Application.targetFrameRate (unity3d.com)](https://docs.unity3d.com/2020.2/Documentation/ScriptReference/Application-targetFrameRate.html)
 
--   [Unity - Scripting API: QualitySettings.vSyncCount (unity3d.com)](https://docs.unity3d.com/2020.2/Documentation/ScriptReference/QualitySettings-vSyncCount.html)
+- [Unity - Scripting API: QualitySettings.vSyncCount (unity3d.com)](https://docs.unity3d.com/2020.2/Documentation/ScriptReference/QualitySettings-vSyncCount.html)
 
--
+- 

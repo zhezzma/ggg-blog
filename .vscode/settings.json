@@ -8,5 +8,6 @@
     "yarkdown.autoSaveImage": true,
     "yarkdown.generateName": true,
     "yarkdown.imgSavePath": "${workspaceRoot}/public/images/${fileBasenameNoExtension}",
-    "yarkdown.newImageNameFormat": "random"
+    "yarkdown.newImageNameFormat": "random",
+    "files.eol": "\n",
   }
